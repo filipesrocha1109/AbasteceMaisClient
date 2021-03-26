@@ -8,13 +8,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Global from "../../Public/Global";
 
 export default function Login({ navigation }) {
-    const [usuario, setUsuario] = useState("");
-    const [senha, setSenha] = useState("");
+    const [user, setUser] = useState("");
+    const [password, setPassword] = useState("");
     const [erros, setErros] = useState("");
 
     useEffect(() => {
-        setUsuario(usuario);
-        setSenha(senha);
+        setUser(user);
+        setPassword(password);
         setErros(erros);
     }, []);
 
@@ -28,7 +28,7 @@ export default function Login({ navigation }) {
     };
 
     const Login = () => {
-        if (usuario && senha) {
+        if (user && password) {
             fetch(Global.ServerIP + "api/Registrations/LoginRegistrations", {
                 method: "POST",
                 headers: {
@@ -37,8 +37,8 @@ export default function Login({ navigation }) {
                     Authorization: Global.Authorization,
                 },
                 body: JSON.stringify({
-                    username: usuario,
-                    password: senha,
+                    username: user,
+                    password: password,
                 }),
             })
                 .then((response) => response.text())
@@ -85,8 +85,8 @@ export default function Login({ navigation }) {
                 style={styles.Input}
                 placeholder={"Username"}
                 placeholderTextColor="#fff"
-                onChangeText={(text) => setUsuario(text)}
-                value={usuario}
+                onChangeText={(text) => setUser(text)}
+                value={user}
             />
             <IconIonicons
                 name="key"
@@ -98,8 +98,8 @@ export default function Login({ navigation }) {
                 style={styles.Input}
                 placeholder={"Password"}
                 placeholderTextColor="#fff"
-                onChangeText={(text) => setSenha(text)}
-                value={senha}
+                onChangeText={(text) => setPassword(text)}
+                value={password}
                 secureTextEntry={true}
             />
             <Text style={styles.Button} onPress={Login}>

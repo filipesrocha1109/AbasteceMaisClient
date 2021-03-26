@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {StyleSheet, TextInput, Text, View, Button, Alert, ScrollView, SafeAreaView, StatusBar } from "react-native";
 
+import Global from "../../Public/Global";
+
+
 export default function CreateRegistration({ navigation }) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [CPFCNPJ, setCPFCNPJ] = useState("");
+    const [phone, setPhone] = useState("");
     const [CEP, setCEP] = useState("");
     const [address, setAddress] = useState("");
     const [number, setNumber] = useState("");
@@ -18,6 +22,7 @@ export default function CreateRegistration({ navigation }) {
     const [nameError, setNameError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [CPFCNPJError, setCPFCNPJError] = useState("");
+    const [phoneError, setPhoneError] = useState("");
     const [CEPError, setCEPError] = useState("");
     const [addressError, setAddressError] = useState("");
     const [numberError, setNumberError] = useState("");
@@ -31,6 +36,7 @@ export default function CreateRegistration({ navigation }) {
         setName(name);
         setEmail(email);
         setCPFCNPJ(CPFCNPJ);
+        setPhone(phone);
         setCEP(CEP);
         setAddress(address);
         setNumber(number);
@@ -42,98 +48,153 @@ export default function CreateRegistration({ navigation }) {
         setNameError(nameError);
         setEmailError(emailError);
         setCPFCNPJError(CPFCNPJError),
-            setCEPError(CEPError),
-            setAddressError(addressError),
-            setNumberError(numberError),
-            setDistrictError(districtError),
-            setCityError(cityError),
-            setStateError(stateError),
-            setPasswordError(passwordError),
-            setReplayPasswordError(replayPasswordError);
+        setPhoneError(phoneError),
+        setCEPError(CEPError),
+        setAddressError(addressError),
+        setNumberError(numberError),
+        setDistrictError(districtError),
+        setCityError(cityError),
+        setStateError(stateError),
+        setPasswordError(passwordError),
+        setReplayPasswordError(replayPasswordError);
     }, []);
 
-    function Validate() {
-        setEerrors(false);
+
+    const Save = () => {
+
+        var errorCreate = false
 
         if (!name) {
             setNameError("Name is empity");
-            setEerrors(true);
+            errorCreate = true;
+            
         } else {
             setNameError("");
         }
         if (!email) {
             setEmailError("Email is empity");
-            setEerrors(true);
+            
         } else {
             setEmailError("");
         }
         if (!CPFCNPJ) {
             setCPFCNPJError("CPF / CNPJ is empity");
-            setEerrors(true);
+            errorCreate = true;
         } else {
             setCPFCNPJError("");
         }
+        if (!phone) {
+            setPhoneError("Phone is empity");
+            errorCreate = true;
+        } else {
+            setPhoneError("");
+        }
         if (!CEP) {
             setCEPError("CEP is empity");
-            setEerrors(true);
+            errorCreate = true;
         } else {
             setCEPError("");
         }
         if (!address) {
             setAddressError("Address is empity");
-            setEerrors(true);
+            errorCreate = true;
         } else {
             setAddressError("");
         }
         if (!number) {
             setNumberError("Number is empity");
-            setEerrors(true);
+            errorCreate = true;
         } else {
             setNumberError("");
         }
         if (!district) {
             setDistrictError("District is empity");
-            setEerrors(true);
+            errorCreate = true;
         } else {
             setDistrictError("");
         }
         if (!city) {
             setCityError("City is empity");
-            setEerrors(true);
+            errorCreate = true;
         } else {
             setCityError("");
         }
         if (!state) {
             setStateError("State is empity");
-            setEerrors(true);
+            errorCreate = true;
         } else {
             setStateError("");
         }
         if (!password) {
             setPasswordError("Password is empity");
-            setEerrors(true);
+            errorCreate = true;
         } else {
             setPasswordError("");
         }
         if (!replayPassword) {
             setReplayPasswordError("Replay Password is empity");
-            setEerrors(true);
+            errorCreate = true;
         } else {
             setReplayPasswordError("");
         }
 
-        if (!errors) {
-            Create();
+        if (replayPassword != password) {
+            setReplayPasswordError("Different passwords");
+            setPasswordError("Different passwords");
+            errorCreate = true;
+        } else {
+            setReplayPasswordError("");
         }
+             
+        if(!errorCreate){
+            fetch(Global.ServerIP + "api/Registrations/CreateRegistrations", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: Global.Authorization,
+                },
+                body: JSON.stringify({
+                    name : name,
+                    email : email,
+                    CPFCNPJ : CPFCNPJ,
+                    phone : phone,
+                    password : password,
+                    CEP : CEP,
+                    address : address,
+                    number : number,
+                    district : district,
+                    city : city,
+                    state : state
+                }),
+            })
+                .then((response) => response.text())
+                .then((responseText) => {
+                    responseText = JSON.parse(responseText);
+                    if (responseText.success) {
+                        navigation.navigate("Login");
+                    } else {
+                        setErros(responseText.message);
+                        Alert.alert(
+                            "Error",
+                            erros,       
+                        );
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
     }
 
-    function Create() {
-        Alert.alert("Salvar");
-    }
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView style={styles.scrollView}>
+            <ScrollView 
+            style={styles.scrollView}
+            keyboardShouldPersistTaps='always'
+            >
                 <TextInput
                     style={styles.FirstInput}
                     placeholder={"Name"}
@@ -159,6 +220,16 @@ export default function CreateRegistration({ navigation }) {
                 />
                 <Text style={CPFCNPJError ? styles.error : ""}>
                     {CPFCNPJError}
+                </Text>
+                <TextInput
+                    style={styles.Input}
+                    placeholder={"Phone"}
+                    placeholderTextColor="#B2B0B0"
+                    onChangeText={(text) => setPhone(text)}
+                    value={phone}
+                />
+                <Text style={phoneError ? styles.error : ""}>
+                    {phoneError}
                 </Text>
                 <TextInput
                     style={styles.Input}
@@ -237,7 +308,7 @@ export default function CreateRegistration({ navigation }) {
                     {replayPasswordError}
                 </Text>
 
-                <Text style={styles.Button} onPress={Validate}>
+                <Text style={styles.Button} onPress={Save}>
                     Create
                 </Text>
             </ScrollView>
