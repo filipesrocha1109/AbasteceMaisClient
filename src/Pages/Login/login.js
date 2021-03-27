@@ -50,6 +50,7 @@ export default function Login({ navigation }) {
                             "registration_id"
                         );
                         navigation.navigate("Index");
+                        //navigation.navigate("Test");
                     } else {
                         setErros(responseText.message);
                         Alert.alert(

@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import Global from "../../Public/Global";
+
 export default function Index({ navigation }) {
     const [registrationId, setRegistrationId] = useState("");
+    const [ listState, SetListState ] = useState([]);
+
 
     useEffect(() => {
         setRegistrationId(registrationId);
@@ -25,10 +29,44 @@ export default function Index({ navigation }) {
     };
     getData();
 
+    const Login = () => {
+        fetch(Global.ServerIP + "api/Registrations/GetState", {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: Global.Authorization,
+            }
+        })
+            .then((response) => response.text())
+            .then((responseText) => {
+                responseText = JSON.parse(responseText);
+                if (responseText.success) {
+                    var list = [];
+                    responseText.data.listStates.forEach(element => {
+                        list.push(element.name)
+                    });
+
+                    SetListState(list);
+
+                } else {
+                    console.log(responseText.message);
+                    
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        
+    };
+
+    function imprime(value){ console.log(value)}
+
     return (
         <View>
             <Text>userID = {registrationId}</Text>
-            <Text>Index</Text>
+            <Text onPress={Login}>Index</Text>
+            <Text>states = {listState}</Text>
         </View>
     );
 }

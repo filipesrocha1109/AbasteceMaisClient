@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {StyleSheet, TextInput, Text, View, Button, Alert, ScrollView, SafeAreaView, StatusBar } from "react-native";
+import {StyleSheet, TextInput, Text, TouchableOpacity, Alert, ScrollView, SafeAreaView, StatusBar, View } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 
 import Global from "../../Public/Global";
 
@@ -17,7 +18,13 @@ export default function CreateRegistration({ navigation }) {
     const [state, setState] = useState("");
     const [password, setPassword] = useState("");
     const [replayPassword, setReplayPassword] = useState("");
-    const [errors, setEerrors] = useState(false);
+
+    const [ listState, SetListState ] = useState([]);
+    const [ listCity, SetListCity ] = useState([]);
+    const [ listDistrict, SetListDistrict ] = useState([]);
+
+    const [ load, SetLoad ] = useState(0);
+    const [ errors , setErrors ] = useState("");
 
     const [nameError, setNameError] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -58,6 +65,102 @@ export default function CreateRegistration({ navigation }) {
         setPasswordError(passwordError),
         setReplayPasswordError(replayPasswordError);
     }, []);
+
+    const list = () =>{
+        if(load == 0){
+
+            fetch(Global.ServerIP + "api/Registrations/GetStates", {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: Global.Authorization,
+                }
+            })
+                .then((response) => response.text())
+                .then((responseText) => {
+                    responseText = JSON.parse(responseText);
+                    if (responseText.success) {
+                        var list = [];
+                        responseText.data.listStates.forEach(element => {
+                            list.push(element.name)
+                        });
+
+                        SetListState(list);
+                        
+
+                    } else {
+                        console.log(responseText.message);                 
+                    }
+                    console.log('list state')
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+
+            fetch(Global.ServerIP + "api/Registrations/GetCitys", {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: Global.Authorization,
+                }
+            })
+                .then((response) => response.text())
+                .then((responseText) => {
+                    responseText = JSON.parse(responseText);
+                    if (responseText.success) {
+                        var list = [];
+                        responseText.data.listCitys.forEach(element => {
+                            list.push(element.name)
+                        });
+
+                        SetListCity(list);
+                        
+
+                    } else {
+                        console.log(responseText.message);                 
+                    }
+                    console.log('list city')
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+
+            fetch(Global.ServerIP + "api/Registrations/GetDistricts", {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: Global.Authorization,
+                }
+            })
+                .then((response) => response.text())
+                .then((responseText) => {
+                    responseText = JSON.parse(responseText);
+                    if (responseText.success) {
+                        var list = [];
+                        responseText.data.listDistricts.forEach(element => {
+                            list.push(element.name)
+                        });
+
+                        SetListDistrict(list);
+
+                    } else {
+                        console.log(responseText.message);                 
+                    }
+                    console.log('list Districty')
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            
+            SetLoad(1)
+        }
+        
+    }
+
+    list();
 
 
     const Save = () => {
@@ -145,7 +248,7 @@ export default function CreateRegistration({ navigation }) {
         } else {
             setReplayPasswordError("");
         }
-             
+        
         if(!errorCreate){
             fetch(Global.ServerIP + "api/Registrations/CreateRegistrations", {
                 method: "POST",
@@ -166,7 +269,7 @@ export default function CreateRegistration({ navigation }) {
                     district : district,
                     city : city,
                     state : state
-                }),
+                }),            
             })
                 .then((response) => response.text())
                 .then((responseText) => {
@@ -174,10 +277,11 @@ export default function CreateRegistration({ navigation }) {
                     if (responseText.success) {
                         navigation.navigate("Login");
                     } else {
-                        setErros(responseText.message);
+                        console.log(responseText.message)
+                        setErrors(responseText.message);
                         Alert.alert(
                             "Error",
-                            erros,       
+                            errors,       
                         );
                     }
                 })
@@ -239,51 +343,78 @@ export default function CreateRegistration({ navigation }) {
                     value={CEP}
                 />
                 <Text style={CEPError ? styles.error : ""}>{CEPError}</Text>
-                <TextInput
-                    style={styles.Input}
-                    placeholder={"Address"}
-                    placeholderTextColor="#B2B0B0"
-                    onChangeText={(text) => setAddress(text)}
-                    value={address}
-                />
-                <Text style={addressError ? styles.error : ""}>
-                    {addressError}
-                </Text>
-                <TextInput
-                    style={styles.Input}
-                    placeholder={"Number"}
-                    placeholderTextColor="#B2B0B0"
-                    onChangeText={(text) => setNumber(text)}
-                    value={number}
-                />
-                <Text style={numberError ? styles.error : ""}>
-                    {numberError}
-                </Text>
-                <TextInput
-                    style={styles.Input}
-                    placeholder={"Distric"}
-                    placeholderTextColor="#B2B0B0"
-                    onChangeText={(text) => setDistrict(text)}
-                    value={district}
-                />
+                <View style={styles.ContainerAdress}>
+                    <TextInput
+                        style={[styles.Input, styles.Address]}
+                        placeholder={"Address"}
+                        placeholderTextColor="#B2B0B0"
+                        onChangeText={(text) => setAddress(text)}
+                        value={address}
+                    />               
+                    <TextInput
+                        style={[styles.Input, styles.Number]}
+                        placeholder={"Number"}
+                        placeholderTextColor="#B2B0B0"
+                        onChangeText={(text) => setNumber(text)}
+                        value={number}
+                    />
+                </View>
+                <View style={styles.ContainerAdress}>
+                    <Text style={addressError ? styles.error : ""}>
+                        {addressError}
+                    </Text>
+                    <Text style={numberError ? [styles.error, styles.ErrorNumber] : ""}>
+                        {numberError}
+                    </Text>
+                </View>
+                <TouchableOpacity style={ styles.select}>
+                    <Picker
+                        style={styles.select}
+                        onValueChange={(itemValue) => 
+                        setDistrict(itemValue)}                      
+                    >
+                    <Picker.Item label={"Select District"} value={0} key={0}/>
+                    {
+                        listDistrict.map(value =>{
+                            return <Picker.Item label={value} value={value} key={value}/>
+                        })
+                    }
+                    </Picker>
+                </TouchableOpacity>
                 <Text style={districtError ? styles.error : ""}>
                     {districtError}
                 </Text>
-                <TextInput
-                    style={styles.Input}
-                    placeholder={"City"}
-                    placeholderTextColor="#B2B0B0"
-                    onChangeText={(text) => setCity(text)}
-                    value={city}
-                />
+                <TouchableOpacity style={ styles.select}>
+                    <Picker
+                        style={styles.select}
+                        onValueChange={(itemValue) => 
+                        setCity(itemValue)}                      
+                    >
+                    <Picker.Item label={"Select City"} value={0} key={0}/>
+                    {
+                        listCity.map(value =>{
+                            return <Picker.Item label={value} value={value} key={value}/>
+                        })
+                    }
+                    </Picker>
+                </TouchableOpacity>
                 <Text style={cityError ? styles.error : ""}>{cityError}</Text>
-                <TextInput
-                    style={styles.Input}
-                    placeholder={"State"}
-                    placeholderTextColor="#B2B0B0"
-                    onChangeText={(text) => setState(text)}
-                    value={state}
-                />
+                
+                <TouchableOpacity style={ styles.select}>
+                    <Picker
+                        style={styles.select}
+                        onValueChange={(itemValue) => 
+                        setState(itemValue)}
+                    >
+                    <Picker.Item label={"Select State"} value={0} key={0}/>
+                    {
+                        listState.map(value =>{
+                            return <Picker.Item label={value} value={value} key={value}/>
+                        })
+                    }
+                    </Picker>
+                </TouchableOpacity>
+
                 <Text style={stateError ? styles.error : ""}>{stateError}</Text>
                 <TextInput
                     style={styles.Input}
@@ -365,4 +496,26 @@ const styles = StyleSheet.create({
         marginTop: 3,
         fontSize: 12,
     },
+    select: {
+        width: "100%",
+        backgroundColor: "#E5E5E5",
+        borderRadius: 5,
+        height: 50,
+        paddingLeft: 15,
+        color: "#000000",
+        
+    },
+    Number:{
+        width: '30%',
+        marginLeft:10
+    },
+    Address:{
+        width: '67%'
+    },
+    ContainerAdress:{
+        flexDirection:'row'
+    },
+    ErrorNumber:{
+        marginLeft:110
+    }
 });

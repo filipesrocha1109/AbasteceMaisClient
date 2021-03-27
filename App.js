@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./src/Pages/Login/login";
 import CreateRegistration from "./src/Pages/Registrations/createRegistration";
 import Index from "./src/Pages/GasStation/index";
+import Test from "./src/Pages/Registrations/test"
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,14 @@ function App() {
                     component={Index}
                     options={{
                         title: "Home",
+                    }}
+                />
+
+                <Stack.Screen
+                    name="Test"
+                    component={Test}
+                    options={{
+                        title: "Test",
                     }}
                 />
             </Stack.Navigator>
