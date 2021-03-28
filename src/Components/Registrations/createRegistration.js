@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {StyleSheet, TextInput, Text, TouchableOpacity, Alert, ScrollView, SafeAreaView, StatusBar, View } from "react-native";
+import {StyleSheet, TextInput, Text, TouchableOpacity, Alert, ScrollView, SafeAreaView,  View } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 
 import Global from "../../Public/Global";
@@ -367,9 +367,9 @@ export default function CreateRegistration({ navigation }) {
                         {numberError}
                     </Text>
                 </View>
-                <TouchableOpacity style={ styles.select}>
+                <TouchableOpacity style={ district ? styles.select : styles.selectPlaceholder}>
                     <Picker
-                        style={styles.select}
+                        style={ district ? styles.select : styles.selectPlaceholder}
                         onValueChange={(itemValue) => 
                         setDistrict(itemValue)}                      
                     >
@@ -384,9 +384,9 @@ export default function CreateRegistration({ navigation }) {
                 <Text style={districtError ? styles.error : ""}>
                     {districtError}
                 </Text>
-                <TouchableOpacity style={ styles.select}>
+                <TouchableOpacity style={  city ? styles.select : styles.selectPlaceholder}>
                     <Picker
-                        style={styles.select}
+                        style={ city ? styles.select : styles.selectPlaceholder}
                         onValueChange={(itemValue) => 
                         setCity(itemValue)}                      
                     >
@@ -400,9 +400,9 @@ export default function CreateRegistration({ navigation }) {
                 </TouchableOpacity>
                 <Text style={cityError ? styles.error : ""}>{cityError}</Text>
                 
-                <TouchableOpacity style={ styles.select}>
+                <TouchableOpacity style={  state ? styles.select : styles.selectPlaceholder}>
                     <Picker
-                        style={styles.select}
+                        style={ state ? styles.select : styles.selectPlaceholder}
                         onValueChange={(itemValue) => 
                         setState(itemValue)}
                     >
@@ -503,6 +503,15 @@ const styles = StyleSheet.create({
         height: 50,
         paddingLeft: 15,
         color: "#000000",
+        
+    },
+    selectPlaceholder: {
+        width: "100%",
+        backgroundColor: "#E5E5E5",
+        borderRadius: 5,
+        height: 50,
+        paddingLeft: 15,
+        color: "#B2B0B0",
         
     },
     Number:{

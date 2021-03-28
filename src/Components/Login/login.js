@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#1d4a5f",
         flex: 1,
         alignItems: "center",
+        marginTop:25
     },
     ForgotPasswor: {
         color: "#ffff",

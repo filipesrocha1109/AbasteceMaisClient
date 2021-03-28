@@ -1,52 +1,94 @@
 import * as React from "react";
+import { StyleSheet, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createDrawerNavigator, useIsDrawerOpen  } from '@react-navigation/drawer'
+import Entypo from "react-native-vector-icons/Entypo";
 
-import Login from "./src/Pages/Login/login";
-import CreateRegistration from "./src/Pages/Registrations/createRegistration";
-import Index from "./src/Pages/GasStation/index";
-import Test from "./src/Pages/Registrations/test"
+import users from './src/Screens/users'
+import gasStation from './src/Screens/gasStation'
+import Login from './src/Components/Login/login'
+import CreateRegistration from './src/Components/Registrations/createRegistration'
 
-const Stack = createStackNavigator();
+/*
+headerShown:true,
+headerTitleAlign:'center'
+*/
+const Drawer = createDrawerNavigator();
 
-function App() {
+export default function App() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login">
-                <Stack.Screen
-                    name="Login"
-                    component={Login}
+            <Drawer.Navigator 
+                initialRouteName="Login"
+                drawerStyle ={{backgroundColor:'#2c353c'}}
+                drawerContentOptions={{
+                    activeBackgroundColor: '#ffff',
+                    activeTintColor:'#2c353c',
+                    inactiveTintColor: '#ffff',
+                    labelStyle:{
+                    fontSize:18,
+                    fontWeight:'bold'
+                }
+            }}
+                >
+                
+                
+                <Drawer.Screen
+                    name="Index"
+                    component={gasStation}                   
                     options={{
-                        title: "Login",
+                        title: "Home",
+                        headerShown:true,
+                        headerTitleAlign:'center'
+                    }}
+                />
+                <Drawer.Screen
+                    name="User"
+                    component={users}
+                    options={{
+                        title: "User",
                     }}
                 />
 
-                <Stack.Screen
+                <Drawer.Screen
+                    name="Login"
+                    component={Login}
+                    options={{
+                        swipeEnabled: false,
+                        title:"Log out"
+                    }}
+                />
+                <Drawer.Screen
+                    
                     name="CreateRegistration"
                     component={CreateRegistration}
                     options={{
                         title: "Create Registration",
+                        headerShown:true,
+                        headerTitleAlign:'center',
+                        swipeEnabled: false,
+                        headerLeft: () => (
+                            <Text
+                              onPress={() => alert('This is a button!')}
+                              title="Info"
+                              color="#fff"
+                            />
+                          ),
+                        drawerLabel: () => null,
+                        title: undefined,
+                        drawerIcon: () => null,
                     }}
                 />
-
-                <Stack.Screen
-                    name="Index"
-                    component={Index}
-                    options={{
-                        title: "Home",
-                    }}
-                />
-
-                <Stack.Screen
-                    name="Test"
-                    component={Test}
-                    options={{
-                        title: "Test",
-                    }}
-                />
-            </Stack.Navigator>
+                                       
+            </Drawer.Navigator>
         </NavigationContainer>
     );
 }
 
-export default App;
+const styles = StyleSheet.create({
+    menu:{
+        marginTop: 10,
+    }
+})
+
