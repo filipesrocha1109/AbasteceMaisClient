@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, TextInput, Text, View, Alert } from "react-native";
+import { StyleSheet, TextInput, Text, View, Alert,Image } from "react-native";
 import IconAntDesign from "react-native-vector-icons/AntDesign";
-import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import IconIonicons from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -49,7 +48,7 @@ export default function Login({ navigation }) {
                             responseText.data.registration.id,
                             "registration_id"
                         );
-                        navigation.navigate("Index");
+                        navigation.navigate("Home");
                         //navigation.navigate("Test");
                     } else {
                         setErros(responseText.message);
@@ -70,11 +69,9 @@ export default function Login({ navigation }) {
 
     return (
         <View style={styles.Container}>
-            <IconFontAwesome5
-                name="gas-pump"
-                size={70}
-                color="#ffff"
+            <Image
                 style={styles.IconLogo}
+                source={require('../../assets/logo-black.png')}
             />
             <IconAntDesign
                 name="user"
@@ -109,7 +106,7 @@ export default function Login({ navigation }) {
             <Text style={styles.ForgotPasswor}>forgot passwor ?</Text>
             <Text
                 style={styles.ForgotPasswor}
-                onPress={() => navigation.navigate("CreateRegistration")}
+                onPress={() => navigation.navigate("Create",{ screen: 'Create' })}
             >
                 Sing Up
             </Text>
@@ -156,7 +153,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#1d4a5f",
         flex: 1,
         alignItems: "center",
-        marginTop:25
+        marginTop:40
     },
     ForgotPasswor: {
         color: "#ffff",
@@ -173,18 +170,20 @@ const styles = StyleSheet.create({
     },
     IconUser: {
         position: "absolute",
-        top: 130,
-        left: 40,
+        top: 201,
+        left: 45,
         zIndex: 3,
     },
     IconLogo: {
-        top: 25,
-        marginBottom: 25,
+        top: 40,
+        marginBottom: 50,
+        height:120,
+        width:190
     },
     IconPassword: {
         position: "absolute",
-        top: 192,
-        left: 40,
+        top: 266,
+        left: 45,
         zIndex: 4,
     },
 });
