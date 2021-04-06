@@ -4,9 +4,6 @@ import IconAntDesign from "react-native-vector-icons/AntDesign";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { DrawerItem,DrawerContentScrollView } from '@react-navigation/drawer';
 
-let heigt = Dimensions.get('window').height * 0.85
-let heigtBack = Dimensions.get('window').height * 0.93
-
 export default function DrawerContent(props) {
 	const {navigation} = props;
 
@@ -79,7 +76,10 @@ export default function DrawerContent(props) {
 
 		</DrawerContentScrollView >
 	);
-}
+};
+
+let heightScreen = Dimensions.get('window').height;
+let widthScreen = Dimensions.get('window').width; 
 
 const styles = StyleSheet.create({
 	drawerContent: {
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 		
 	},
 	logo:{
-		height: 200,
+		height: heightScreen  * 0.31,
 		//backgroundColor: 'blue'
 	},
 	item:{
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
 		borderRadius:5,
 		paddingLeft:40
 	},top:{
-		height:heigt,
+		height:heightScreen  * 0.85,
 		
 	},
 	footer:{
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     },
 	IconBack: {
         position: "absolute",
-        top: heigtBack,
+        top: heightScreen * 0.93,
         left: 25,
         zIndex: 99,
     },

@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#1d4a5f",
         flex: 1,
         alignItems: "center",
-        marginTop:40
+        
     },
     ForgotPasswor: {
         color: "#ffff",

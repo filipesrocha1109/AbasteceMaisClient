@@ -22,7 +22,7 @@ export default function Routes() {
     return (
         <NavigationContainer>
             <Drawer.Navigator 
-                initialRouteName="Login"  
+                initialRouteName="Home"  
                 
                 drawerStyle={{width: 250 }}
                 drawerContent={(props) => <CustomDrawer {...props} />}            

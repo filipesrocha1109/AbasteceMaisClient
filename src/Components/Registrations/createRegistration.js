@@ -23,7 +23,7 @@ export default function CreateRegistration({ navigation }) {
     const [ listCity, SetListCity ] = useState([]);
     const [ listDistrict, SetListDistrict ] = useState([]);
 
-    const [ load, SetLoad ] = useState(0);
+    const [ load, SetLoad ] = useState(false);
     const [ errors , setErrors ] = useState("");
 
     const [nameError, setNameError] = useState("");
@@ -64,11 +64,13 @@ export default function CreateRegistration({ navigation }) {
         setStateError(stateError),
         setPasswordError(passwordError),
         setReplayPasswordError(replayPasswordError);
+        SetLoad(load);
     }, []);
 
-    const list = () =>{
-        if(load == 0){
 
+    const listSelct = () =>{
+
+        if(!load){    
             fetch(Global.ServerIP + "api/Registrations/GetStates", {
                 method: "GET",
                 headers: {
@@ -81,18 +83,20 @@ export default function CreateRegistration({ navigation }) {
                 .then((responseText) => {
                     responseText = JSON.parse(responseText);
                     if (responseText.success) {
-                        var list = [];
-                        responseText.data.listStates.forEach(element => {
-                            list.push(element.name)
-                        });
+                        
+                        var list = {};
+                        var listState = responseText.data.listStates;
+
+                        for (var i = 0; i < listState.length; ++i){
+                            list[listState[i].id] = listState[i].name;
+                        }       
 
                         SetListState(list);
-                        
 
                     } else {
                         console.log(responseText.message);                 
                     }
-                    console.log('list state')
+                    //console.log('list State')
                 })
                 .catch((error) => {
                     console.error(error);
@@ -110,23 +114,25 @@ export default function CreateRegistration({ navigation }) {
                 .then((responseText) => {
                     responseText = JSON.parse(responseText);
                     if (responseText.success) {
-                        var list = [];
-                        responseText.data.listCitys.forEach(element => {
-                            list.push(element.name)
-                        });
-
-                        SetListCity(list);
-                        
-
+    
+                        var list = {};
+                        var listCitys = responseText.data.listCitys;
+    
+                        for (var i = 0; i < listCitys.length; ++i){
+                            list[listCitys[i].id] = listCitys[i].name;
+                        }       
+    
+                        SetListCity(list);                      
+    
                     } else {
                         console.log(responseText.message);                 
                     }
-                    console.log('list city')
+                    //console.log('list city')
                 })
                 .catch((error) => {
                     console.error(error);
                 });
-
+            
             fetch(Global.ServerIP + "api/Registrations/GetDistricts", {
                 method: "GET",
                 headers: {
@@ -139,28 +145,29 @@ export default function CreateRegistration({ navigation }) {
                 .then((responseText) => {
                     responseText = JSON.parse(responseText);
                     if (responseText.success) {
-                        var list = [];
-                        responseText.data.listDistricts.forEach(element => {
-                            list.push(element.name)
-                        });
-
+                        var list = {};
+                        var listDistricts = responseText.data.listDistricts;
+    
+                        for (var i = 0; i < listDistricts.length; ++i){
+                            list[listDistricts[i].id] = listDistricts[i].name;
+                        }       
+    
                         SetListDistrict(list);
-
+    
                     } else {
                         console.log(responseText.message);                 
                     }
-                    console.log('list Districty')
+                    //console.log('list Districty')
                 })
                 .catch((error) => {
                     console.error(error);
                 });
-            
-            SetLoad(1)
-        }
-        
-    }
 
-    list();
+            SetLoad(true)
+        }
+    }
+    listSelct();
+
 
 
     const Save = () => {
@@ -226,6 +233,7 @@ export default function CreateRegistration({ navigation }) {
             setStateError("State is empity");
             errorCreate = true;
         } else {
+            //alert(state)
             setStateError("");
         }
         if (!password) {
@@ -266,16 +274,26 @@ export default function CreateRegistration({ navigation }) {
                     CEP : CEP,
                     address : address,
                     number : number,
-                    district : district,
-                    city : city,
-                    state : state
+                    districtID : district,
+                    cityID : city,
+                    stateID : state
                 }),            
             })
                 .then((response) => response.text())
                 .then((responseText) => {
                     responseText = JSON.parse(responseText);
                     if (responseText.success) {
-                        navigation.navigate("Login");
+                        if(!responseText.data.registration){
+                            setErrors(responseText.message);
+                            Alert.alert(
+                                "Error",
+                                errors,       
+                            );
+                        }else{
+                            navigation.navigate("Login");
+                        }
+                        
+
                     } else {
                         console.log(responseText.message)
                         setErrors(responseText.message);
@@ -367,55 +385,64 @@ export default function CreateRegistration({ navigation }) {
                         {numberError}
                     </Text>
                 </View>
+
+                <TouchableOpacity style={  state ? styles.select : styles.selectPlaceholder}>
+                    <Picker
+                        style={ state ? styles.select : styles.selectPlaceholder}
+                        onc
+                        onValueChange={(itemValue) => { setState(itemValue); }
+                    }
+                    >
+                        <Picker.Item label={"Select State"} value={0} key={0}/>
+                        {
+                            Object.keys(listState).map(key => {
+                                return <Picker.Item label={listState[key]} value={key} key={key}/>
+                            })
+                        }  
+                        <Picker.Item label={"Outher State"} value={"NF"} key={"NF"}/> 
+                    </Picker>
+                </TouchableOpacity>
+                <Text style={stateError ? styles.error : ""}>{stateError}</Text>
+
+                <TouchableOpacity style={  city ? styles.select : styles.selectPlaceholder}>
+                    <Picker
+                        style={ city ? styles.select : styles.selectPlaceholder}
+                        onValueChange={(itemValue) => {
+                            setCity(itemValue);
+                            
+                        }
+                        
+                    }                      
+                    >
+                        <Picker.Item label={"Select City"} value={0} key={0}/>
+                        {
+                            Object.keys(listCity).map(key => {
+                                return <Picker.Item label={listCity[key]} value={key} key={key}/>
+                            })
+                        } 
+                        <Picker.Item label={"Outher City"} value={"NF"} key={"NF"}/> 
+
+                    </Picker>
+                </TouchableOpacity>
+                <Text style={cityError ? styles.error : ""}>{cityError}</Text>
+
                 <TouchableOpacity style={ district ? styles.select : styles.selectPlaceholder}>
                     <Picker
                         style={ district ? styles.select : styles.selectPlaceholder}
                         onValueChange={(itemValue) => 
                         setDistrict(itemValue)}                      
                     >
-                    <Picker.Item label={"Select District"} value={0} key={0}/>
-                    {
-                        listDistrict.map(value =>{
-                            return <Picker.Item label={value} value={value} key={value}/>
-                        })
-                    }
+                        <Picker.Item label={"Select District"} value={0} key={0}/>
+                        {
+                            Object.keys(listDistrict).map(key => {
+                                return <Picker.Item label={listDistrict[key]} value={key} key={key}/>
+                            })
+                        } 
+                        <Picker.Item label={"Outher District"} value={"NF"} key={"NF"}/> 
                     </Picker>
                 </TouchableOpacity>
-                <Text style={districtError ? styles.error : ""}>
-                    {districtError}
-                </Text>
-                <TouchableOpacity style={  city ? styles.select : styles.selectPlaceholder}>
-                    <Picker
-                        style={ city ? styles.select : styles.selectPlaceholder}
-                        onValueChange={(itemValue) => 
-                        setCity(itemValue)}                      
-                    >
-                    <Picker.Item label={"Select City"} value={0} key={0}/>
-                    {
-                        listCity.map(value =>{
-                            return <Picker.Item label={value} value={value} key={value}/>
-                        })
-                    }
-                    </Picker>
-                </TouchableOpacity>
-                <Text style={cityError ? styles.error : ""}>{cityError}</Text>
-                
-                <TouchableOpacity style={  state ? styles.select : styles.selectPlaceholder}>
-                    <Picker
-                        style={ state ? styles.select : styles.selectPlaceholder}
-                        onValueChange={(itemValue) => 
-                        setState(itemValue)}
-                    >
-                    <Picker.Item label={"Select State"} value={0} key={0}/>
-                    {
-                        listState.map(value =>{
-                            return <Picker.Item label={value} value={value} key={value}/>
-                        })
-                    }
-                    </Picker>
-                </TouchableOpacity>
+                <Text style={districtError ? styles.error : ""}>{districtError}</Text>
 
-                <Text style={stateError ? styles.error : ""}>{stateError}</Text>
                 <TextInput
                     style={styles.Input}
                     placeholder={"Password"}
