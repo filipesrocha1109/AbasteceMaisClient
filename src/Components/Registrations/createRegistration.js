@@ -38,135 +38,118 @@ export default function CreateRegistration({ navigation }) {
     const [stateError, setStateError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [replayPasswordError, setReplayPasswordError] = useState("");
-
-    useEffect(() => {
-        setName(name);
-        setEmail(email);
-        setCPFCNPJ(CPFCNPJ);
-        setPhone(phone);
-        setCEP(CEP);
-        setAddress(address);
-        setNumber(number);
-        setDistrict(district);
-        setCity(city);
-        setState(state);
-        setPassword(password);
-        setReplayPassword(replayPassword);
-        setNameError(nameError);
-        setEmailError(emailError);
-        setCPFCNPJError(CPFCNPJError),
-        setPhoneError(phoneError),
-        setCEPError(CEPError),
-        setAddressError(addressError),
-        setNumberError(numberError),
-        setDistrictError(districtError),
-        setCityError(cityError),
-        setStateError(stateError),
-        setPasswordError(passwordError),
-        setReplayPasswordError(replayPasswordError);
-        SetLoad(load);
+    
+    
+    useEffect(() => {     
+        listSelectState()
     }, []);
 
+    useEffect(() => {          
+        //if(state){listSelectCity()};
+        if(state){listSelectCity(state)};
+    }, [state]);
 
-    const listSelct = () =>{
+    useEffect(() => {          
+        if(city){listSelectDistrict()};
+        if(city){listSelectDistrict(city)};
+    }, [city]);
 
-        if(!load){    
-            fetch(Global.ServerIP + "api/Registrations/GetStates", {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: Global.Authorization,
+
+    const listSelectState = () =>{
+        fetch(Global.ServerIP + "api/Registrations/GetStates", {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: Global.Authorization,
+            }
+        })
+            .then((response) => response.text())
+            .then((responseText) => {
+                responseText = JSON.parse(responseText);
+                if (responseText.success) {
+                    
+                    var list = {};
+                    var listState = responseText.data.listStates;
+
+                    for (var i = 0; i < listState.length; ++i){
+                        list[listState[i].id] = listState[i].name;
+                    }       
+
+                    SetListState(list);
+
+                } else {
+                    console.log(responseText.message);                 
                 }
             })
-                .then((response) => response.text())
-                .then((responseText) => {
-                    responseText = JSON.parse(responseText);
-                    if (responseText.success) {
-                        
-                        var list = {};
-                        var listState = responseText.data.listStates;
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+    
 
-                        for (var i = 0; i < listState.length; ++i){
-                            list[listState[i].id] = listState[i].name;
-                        }       
+    const listSelectCity = ( stateID ) =>{
+        fetch(Global.ServerIP + "api/Registrations/GetCitys?StateID=" + stateID , {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: Global.Authorization,
+            }
+        })
+            .then((response) => response.text())
+            .then((responseText) => {
+                responseText = JSON.parse(responseText);
+                if (responseText.success) {
 
-                        SetListState(list);
+                    var list = {};
+                    var listCitys = responseText.data.listCitys;
 
-                    } else {
-                        console.log(responseText.message);                 
-                    }
-                    //console.log('list State')
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+                    for (var i = 0; i < listCitys.length; ++i){
+                        list[listCitys[i].id] = listCitys[i].name;
+                    }       
 
-            fetch(Global.ServerIP + "api/Registrations/GetCitys", {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: Global.Authorization,
+                    SetListCity(list);         
+
+                } else {
+                    console.log(responseText.message);                 
                 }
             })
-                .then((response) => response.text())
-                .then((responseText) => {
-                    responseText = JSON.parse(responseText);
-                    if (responseText.success) {
-    
-                        var list = {};
-                        var listCitys = responseText.data.listCitys;
-    
-                        for (var i = 0; i < listCitys.length; ++i){
-                            list[listCitys[i].id] = listCitys[i].name;
-                        }       
-    
-                        SetListCity(list);                      
-    
-                    } else {
-                        console.log(responseText.message);                 
-                    }
-                    //console.log('list city')
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-            
-            fetch(Global.ServerIP + "api/Registrations/GetDistricts", {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: Global.Authorization,
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+    const listSelectDistrict = ( cityID ) =>{
+        fetch(Global.ServerIP + "api/Registrations/GetDistricts?CityID=" + cityID , {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: Global.Authorization,
+            }
+        })
+            .then((response) => response.text())
+            .then((responseText) => {
+                responseText = JSON.parse(responseText);
+                if (responseText.success) {
+                    var list = {};
+                    var listDistricts = responseText.data.listDistricts;
+
+                    for (var i = 0; i < listDistricts.length; ++i){
+                        list[listDistricts[i].id] = listDistricts[i].name;
+                    }       
+
+                    SetListDistrict(list);
+ 
+                } else {
+                    console.log(responseText.message);                 
                 }
             })
-                .then((response) => response.text())
-                .then((responseText) => {
-                    responseText = JSON.parse(responseText);
-                    if (responseText.success) {
-                        var list = {};
-                        var listDistricts = responseText.data.listDistricts;
-    
-                        for (var i = 0; i < listDistricts.length; ++i){
-                            list[listDistricts[i].id] = listDistricts[i].name;
-                        }       
-    
-                        SetListDistrict(list);
-    
-                    } else {
-                        console.log(responseText.message);                 
-                    }
-                    //console.log('list Districty')
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-
-            SetLoad(true)
-        }
-    }
-    listSelct();
+            .catch((error) => {
+                console.error(error);
+            });
+    };
 
 
 
@@ -389,11 +372,10 @@ export default function CreateRegistration({ navigation }) {
                 <TouchableOpacity style={  state ? styles.select : styles.selectPlaceholder}>
                     <Picker
                         style={ state ? styles.select : styles.selectPlaceholder}
-                        onc
-                        onValueChange={(itemValue) => { setState(itemValue); }
-                    }
+                        onValueChange={ (itemValue) => { setState(itemValue) } }
+
                     >
-                        <Picker.Item label={"Select State"} value={0} key={0}/>
+                        <Picker.Item label={"Select State"} value={""} key={""}/>
                         {
                             Object.keys(listState).map(key => {
                                 return <Picker.Item label={listState[key]} value={key} key={key}/>
@@ -407,14 +389,9 @@ export default function CreateRegistration({ navigation }) {
                 <TouchableOpacity style={  city ? styles.select : styles.selectPlaceholder}>
                     <Picker
                         style={ city ? styles.select : styles.selectPlaceholder}
-                        onValueChange={(itemValue) => {
-                            setCity(itemValue);
-                            
-                        }
-                        
-                    }                      
+                        onValueChange={ (itemValue) => { setCity(itemValue) } }                      
                     >
-                        <Picker.Item label={"Select City"} value={0} key={0}/>
+                        <Picker.Item label={"Select City"} value={""} key={""}/>
                         {
                             Object.keys(listCity).map(key => {
                                 return <Picker.Item label={listCity[key]} value={key} key={key}/>
@@ -432,7 +409,7 @@ export default function CreateRegistration({ navigation }) {
                         onValueChange={(itemValue) => 
                         setDistrict(itemValue)}                      
                     >
-                        <Picker.Item label={"Select District"} value={0} key={0}/>
+                        <Picker.Item label={"Select District"} value={""} key={""}/>
                         {
                             Object.keys(listDistrict).map(key => {
                                 return <Picker.Item label={listDistrict[key]} value={key} key={key}/>

@@ -5,23 +5,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Global from "../../Public/Global";
 import ListGasStation from "../GasStation/listGasStation";
+import NotFound from '../GasStation/notFound'
 
 export default function Index({ navigation }) {
-    const [registrationId, setRegistrationId] = useState("");
-    const [search, setSearch ] = useState("");
-    const [order, setOrder ] = useState("");
+    const [ registrationId, setRegistrationId] = useState("");
+    const [ name, setName ] = useState("");
+    const [ order, setOrder ] = useState("");
     const [ listOrder, SetListOrder ] = useState(['More Relevant','Highest Price','Lower Price']);
-    const [typeGas, setTypeGas ] = useState("");
+    const [ typeGas, setTypeGas ] = useState("");
     const [ listTypeGas, SetListTypeGas ] = useState(['Gasolina Comum','Gasolina Aditivada','Disel','Gás']);
-    const [district, setDistrict] = useState('');
+    const [ district, setDistrict] = useState('');
     const [ listDistrict, SetListDistrict ] = useState([]);
     const [ load, SetLoad ] = useState(0);
     const [ listGasStation, SetListGasStation] = useState([]);
 
     useEffect(() => {
-        setRegistrationId(registrationId);
-        SetListGasStation(listGasStation)
+        listSelectGasStation(name, typeGas, district, order);
+        listSelectDistrict("4314902");
     }, []);
+
 
     const getData = async () => {
         try {
@@ -39,71 +41,64 @@ export default function Index({ navigation }) {
     };
     getData();
 
-    const list = () =>{
-        if(load == 0){
+    const listSelectDistrict = ( cityID ) =>{
+        fetch(Global.ServerIP + "api/Registrations/GetDistricts?CityID=" + cityID , {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: Global.Authorization,
+            }
+        })
+            .then((response) => response.text())
+            .then((responseText) => {
+                responseText = JSON.parse(responseText);
+                if (responseText.success) {
+                    var list = {};
+                    var listDistricts = responseText.data.listDistricts;
 
-            fetch(Global.ServerIP + "api/Registrations/GetDistricts", {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: Global.Authorization,
+                    for (var i = 0; i < listDistricts.length; ++i){
+                        list[listDistricts[i].id] = listDistricts[i].name;
+                    }       
+
+                    SetListDistrict(list);
+ 
+                } else {
+                    console.log(responseText.message);                 
                 }
             })
-                .then((response) => response.text())
-                .then((responseText) => {
-                    responseText = JSON.parse(responseText);
-                    if (responseText.success) {
-                        var list = {};
-                        var listDistricts = responseText.data.listDistricts;
-    
-                        for (var i = 0; i < listDistricts.length; ++i){
-                            list[listDistricts[i].id] = listDistricts[i].name;
-                        }       
-    
-                        SetListDistrict(list);
-    
-                    } else {
-                        console.log(responseText.message);                 
-                    }
-                    //console.log('list Districty')
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+            .catch((error) => {
+                console.error(error);
+            });
+    };
 
-            fetch(Global.ServerIP + "api/GasStations/GetGasStations", {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: Global.Authorization,
+
+    const listSelectGasStation = ( name, typegas, districtid, order ) =>{
+        var uri = Global.ServerIP + "api/GasStations/GetGasStations?Name="+ name +"&TypeGas="+ typegas +"&DistrictID="+ districtid +"&Order="+ order 
+        fetch(uri , {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: Global.Authorization,
+            }
+        })
+            .then((response) => response.text())
+            .then((responseText) => {
+                responseText = JSON.parse(responseText);
+                if (responseText.success) {
+                    var list = responseText.data.gasStations;
+
+                    SetListGasStation(list);
+                    
+                } else {
+                    console.log(responseText.message);                 
                 }
             })
-                .then((response) => response.text())
-                .then((responseText) => {
-                    responseText = JSON.parse(responseText);
-                    if (responseText.success) {
-                        var list = responseText.data.gasStations;
-
-                        SetListGasStation(list)                      
-    
-                    } else {
-                        console.log(responseText.message);                 
-                    }
-                    //console.log('list Districty')
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-
-            
-            SetLoad(1)
-        }
-        
+            .catch((error) => {
+                console.error(error);
+            });    
     }
-
-    list();
 
 
 
@@ -115,8 +110,8 @@ export default function Index({ navigation }) {
                         style={styles.Search}
                         placeholder={"Search..."}
                         placeholderTextColor="#B2B0B0"
-                        onChangeText={(text) => setSearch(text)}
-                        value={search}
+                        onChangeText={(text) => setName(text)}
+                        value={name}
                     />
                     
                 </View>
@@ -127,7 +122,7 @@ export default function Index({ navigation }) {
                             onValueChange={(itemValue) => 
                             setOrder(itemValue)}                      
                         >
-                        <Picker.Item label={" Select Order"} value={0} key={0}/>
+                        <Picker.Item label={" Select Order"} value={""} key={""}/>
                         {
                             listOrder.map(value =>{
                                 return <Picker.Item label={value} value={value} key={value}/>
@@ -141,7 +136,7 @@ export default function Index({ navigation }) {
                             onValueChange={(itemValue) => 
                             setDistrict(itemValue)}                      
                         >
-                            <Picker.Item label={"Select District"} value={0} key={0}/>
+                            <Picker.Item label={"Select District"} value={""} key={""}/>
                             {
                                 Object.keys(listDistrict).map(key => {
                                     return <Picker.Item label={listDistrict[key]} value={key} key={key}/>
@@ -158,7 +153,7 @@ export default function Index({ navigation }) {
                             onValueChange={(itemValue) => 
                             setTypeGas(itemValue)}                      
                         >
-                        <Picker.Item label={"Select Type Gas"} value={0} key={0}/>
+                        <Picker.Item label={"Select Type Gas"} value={""} key={""}/>
                         {
                             listTypeGas.map(value =>{
                                 return <Picker.Item label={value} value={value} key={value}/>
@@ -168,7 +163,7 @@ export default function Index({ navigation }) {
                     </TouchableOpacity>
                     <Text
                     style={styles.buttonSearch}
-                    onPress={() => alert("pesquisar")}
+                    onPress={() => listSelectGasStation(name, typeGas, district, order)}
                     >
                     Search
                     </Text>                         
@@ -179,63 +174,65 @@ export default function Index({ navigation }) {
                 style={styles.scrollView}
                 keyboardShouldPersistTaps='always'
                 >
-                {
-                    listGasStation.map(({
-                        id,
-                        status,
-                        name,
-                        phone,
-                        gasolinaComum,
-                        gasolinaAditivada,
-                        disel,
-                        gas,
-                        priceGasolinaComum,
-                        priceGasolinaAditivada,
-                        priceDisel,
-                        priceGas,
-                        latitude,
-                        longitude,
-                        cep,
-                        address,
-                        number,
-                        districtID,
-                        cityID,
-                        stateID,
-                        createdOn,
-                        updatedOn
-                        })=>{
-                            return(
-                                <ListGasStation
-                                    id = {id}
-                                    key = {id}
-                                    status = {status}
-                                    name = {name}
-                                    phone = {phone}
-                                    gasolinaComum = {gasolinaComum}
-                                    gasolinaAditivada = {gasolinaAditivada}
-                                    disel = {disel}
-                                    gas = {gas}
-                                    priceGasolinaComum = {priceGasolinaComum}
-                                    priceGasolinaAditivada = {priceGasolinaAditivada}
-                                    priceDisel = {priceDisel}
-                                    priceGas = {priceGas}
-                                    latitude = {latitude}
-                                    longitude = {longitude}
-                                    cep  = {cep}
-                                    address = {address}
-                                    number = {number}
-                                    districtID = {listDistrict[districtID]}
-                                    cityID = {cityID}
-                                    stateID = {stateID}
-                                    createdOn = {createdOn}
-                                    updatedOn = {updatedOn}
-                                />
-                            )                    
-                        })
-                }
+                {                  
+                    listGasStation.length>0 ?
 
-
-                
+                        listGasStation.map(({
+                            id,
+                            status,
+                            name,
+                            phone,
+                            gasolinaComum,
+                            gasolinaAditivada,
+                            disel,
+                            gas,
+                            priceGasolinaComum,
+                            priceGasolinaAditivada,
+                            priceDisel,
+                            priceGas,
+                            latitude,
+                            longitude,
+                            cep,
+                            address,
+                            number,
+                            districtID,
+                            cityID,
+                            stateID,
+                            createdOn,
+                            updatedOn
+                            })=>{
+                                return(
+                                    <ListGasStation
+                                        id = {id}
+                                        key = {id}
+                                        status = {status}
+                                        name = {name}
+                                        phone = {phone}
+                                        gasolinaComum = {gasolinaComum}
+                                        gasolinaAditivada = {gasolinaAditivada}
+                                        disel = {disel}
+                                        gas = {gas}
+                                        priceGasolinaComum = {priceGasolinaComum}
+                                        priceGasolinaAditivada = {priceGasolinaAditivada}
+                                        priceDisel = {priceDisel}
+                                        priceGas = {priceGas}
+                                        latitude = {latitude}
+                                        longitude = {longitude}
+                                        cep  = {cep}
+                                        address = {address}
+                                        number = {number}
+                                        districtID = {listDistrict[districtID]}
+                                        cityID = {cityID}
+                                        stateID = {stateID}
+                                        createdOn = {createdOn}
+                                        updatedOn = {updatedOn}
+                                    />
+                                )   
+                            })
+                        :                     
+                        <NotFound/>                    
+                }              
+          
                 </ScrollView>
             </SafeAreaView >
 

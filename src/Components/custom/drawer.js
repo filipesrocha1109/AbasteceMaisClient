@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 		
 	},
 	logo:{
-		height: heightScreen  * 0.31,
+		height: 200,
 		//backgroundColor: 'blue'
 	},
 	item:{

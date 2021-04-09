@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {StyleSheet, Image, TextInput, Text, TouchableOpacity, Alert, ScrollView, SafeAreaView, StatusBar, View } from "react-native";
+import {StyleSheet, Image, Linking, TextInput, Text, TouchableOpacity, Alert, ScrollView, SafeAreaView, StatusBar, View } from "react-native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+
 
 
 export default function ListGasStation(props) {
+
     return (
        
             <View style={styles.ContainerGasStation}>
@@ -10,7 +16,31 @@ export default function ListGasStation(props) {
                     <Text style={styles.Name} >{props.name}</Text>
                     <Text>{`${props.address}, ${props.number} - ${props.districtID}` }</Text>
                     <Text>{`${props.cep ? props.cep: '00000-000' }`}</Text>
-                    <Text></Text>
+                    <View style={styles.ContaineButtons}> 
+                        <MaterialCommunityIcons
+                            name="google-maps"
+                            size={25}
+                            color="black"
+                            style={styles.maps}
+                            onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${props.address}, ${props.number} - ${props.districtID}` )}
+                        />
+                        <View style={styles.ContaineButtons} >
+                            <AntDesign
+                                name="like1"
+                                size={25}
+                                color="green"
+                                style={styles.like}
+                                onPress={() => alert('like')}
+                            />
+                            <AntDesign
+                                name="dislike1"
+                                size={25}
+                                color="red"
+                                style={styles.like}
+                                onPress={() => alert('deslike')}
+                            />
+                        </View>
+                    </View>
                 </View>
                 <View style={styles.ContainerRight}>
                     <View style={styles.ContainerPrice}>
@@ -61,7 +91,7 @@ export default function ListGasStation(props) {
 const styles = StyleSheet.create({
     ContainerGasStation:{
         backgroundColor:"#E5E5E5",
-        height:130,
+        height:140,
         borderRadius:5,
         marginBottom: 7,
         flexDirection:'row'
@@ -114,6 +144,25 @@ const styles = StyleSheet.create({
         fontSize:21,
         fontWeight:'bold',
         color:'#0e2d3f'
+    },
+    maps:{
+        backgroundColor:'#B2B0B0',
+        height:25,
+        width:25,
+        borderRadius:5,
+        marginTop: 3,
+        marginLeft:5
+    },
+    like:{
+        height:25,
+        width:25,
+        borderRadius:5,
+        marginTop: 3,
+        marginLeft:5
+    },
+    ContaineButtons:{
+        flexDirection: "row",
+        justifyContent: 'space-between',
     }
 
 });

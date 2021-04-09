@@ -11,12 +11,6 @@ export default function Login({ navigation }) {
     const [password, setPassword] = useState("");
     const [erros, setErros] = useState("");
 
-    useEffect(() => {
-        setUser(user);
-        setPassword(password);
-        setErros(erros);
-    }, []);
-
     // storeData String
     const StoreData = async (value, name) => {
         try {
