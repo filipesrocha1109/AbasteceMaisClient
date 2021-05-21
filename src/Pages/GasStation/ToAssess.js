@@ -11,16 +11,17 @@ import Global from "../../Public/Global";
 import ListGasStation from "./listGasStation";
 import NotFound from './notFound'
 
-export default function ToAsseces( { route , navigation }) {
+export default function ToAsseces( porps ) {
     
     //const { id } = route.params;
+    var comentario = "Add a comment in gasstation..." + porps.id
 
     return (
         <View style={ styles.container } >
 
             <View style={ styles.containerInput }  >
                 <TextInput style={styles.input}
-                    placeholder={"Add a comment..."}
+                    placeholder={comentario}
                     numberOfLines={10}
                     multiline={true}
                 />  
@@ -31,7 +32,7 @@ export default function ToAsseces( { route , navigation }) {
                 size={30}
                 color={"#0e2d3f"}
                 style={styles.send}
-                //onPress ={Alert.alert("ok","ok")}
+                onPress ={ () => {Alert.alert("Your comment has been added.","Thanks for feddback!")} }
             />
         </View>
         
@@ -78,6 +79,6 @@ const styles = StyleSheet.create({
      },
      container:{
         marginTop: 5,
-        marginBottom: 5
+        marginBottom: 35
      }
 });
