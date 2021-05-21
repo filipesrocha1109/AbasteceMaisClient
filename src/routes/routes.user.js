@@ -1,10 +1,10 @@
 import * as React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import Show from '../Components/Registrations/showRegistration';
-import Update from '../Components/Registrations/updateRegistration';
-import Delete from '../Components/Registrations/deleteRegistration';
-import Create from '../Components/Registrations/createRegistration';
+import Show from '../Pages/Registrations/showRegistration';
+import Update from '../Pages/Registrations/updateRegistration';
+import Delete from '../Pages/Registrations/deleteRegistration';
+import Create from '../Pages/Registrations/createRegistration';
 
 const Stack = createStackNavigator();
 

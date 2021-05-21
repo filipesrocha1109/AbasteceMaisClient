@@ -12,8 +12,8 @@ import { createDrawerNavigator, DrawerItems } from '@react-navigation/drawer'
 
 import User from '../Screens/users'
 import gasStation from '../Screens/gasStation'
-import Login from '../Components/Login/login'
-import CustomDrawer from '../Components/custom/drawer'
+import Login from '../Pages/Login/login'
+import CustomDrawer from '../Components/drawer/drawer'
 
 const Drawer = createDrawerNavigator();
 
@@ -31,7 +31,7 @@ export default function Routes() {
                     name="Home"
                     component={gasStation}                   
                     options={{
-                        title: "Home",
+                        title: "Gas Station",
                         headerShown:true,
                         headerTitleAlign:'center'
                     }}

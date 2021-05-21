@@ -74,8 +74,14 @@ export default function DeleteRegistration ({ navigation }) {
   
     return (
         <View style={styles.container}>
+            <Text style={styles.title}>               
+                Are you sure you want to delete the registration?
+            </Text>
+            <Text  style={styles.subtitle}>               
+                This action is irreversible!
+            </Text>
             <Text
-                style={styles.DeleteUser}
+                style={styles.deleteUser}
                 onPress={()=> DeleteRegistrationConfirm()}
             >
                 Delete User
@@ -87,9 +93,9 @@ export default function DeleteRegistration ({ navigation }) {
 const styles = StyleSheet.create({
     container : {
         flex : 1,      
-        justifyContent : "center",
+
     },
-        DeleteUser:{
+    deleteUser:{
         marginLeft:25,
         fontSize:20,
         backgroundColor:'#E31111',
@@ -100,5 +106,17 @@ const styles = StyleSheet.create({
         textAlignVertical:'center',
         textAlign:'center',
         fontWeight:'bold'
+    },
+    title:{
+        textAlign: 'center',
+        marginTop:150,
+        fontSize:20,
+        fontWeight:'bold'
+    },
+    subtitle:{
+        textAlign: 'center',
+        marginBottom:70,
+        fontSize:20,
+        marginTop:10,
     },
 });

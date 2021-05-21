@@ -6,16 +6,19 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 
-
 export default function ListGasStation(props) {
+    
+    var name = props.name;
 
     return (
        
             <View style={styles.ContainerGasStation}>
                 <View style={styles.ContainerLeft}>
-                    <Text style={styles.Name} >{props.name}</Text>
-                    <Text>{`${props.address}, ${props.number} - ${props.districtID}` }</Text>
-                    <Text>{`${props.cep ? props.cep: '00000-000' }`}</Text>
+                    <TouchableOpacity  onPress={props.route}>
+                        <Text style={styles.Name} >{name.length > 25 ? name.substring(0, 25) + "...": name}</Text>
+                        <Text>{`${props.address}, ${props.number} - ${props.districtID}` }</Text>
+                        <Text>{`${props.cep ? props.cep: '00000-000' }`}</Text>
+                    </TouchableOpacity >
                     <View style={styles.ContaineButtons}> 
                         <MaterialCommunityIcons
                             name="google-maps"
@@ -91,7 +94,7 @@ export default function ListGasStation(props) {
 const styles = StyleSheet.create({
     ContainerGasStation:{
         backgroundColor:"#E5E5E5",
-        height:140,
+        height:160,
         borderRadius:5,
         marginBottom: 7,
         flexDirection:'row'
@@ -112,18 +115,19 @@ const styles = StyleSheet.create({
         height: 30,
         width: 30,
         resizeMode: "stretch",
-        alignItems: "center",       
+        alignItems: "center",   
+        marginTop:8,    
     },
     Price:{
         color:'black',
-        marginTop:3,
+        marginTop:10,
         fontSize:18,
         fontFamily:'Roboto',
         marginRight:8
     },
     PriceWhite:{
         color:'#B0B0B0',
-        marginTop:3,
+        marginTop:10,
         fontSize:18,
         fontFamily:'Roboto',
         marginRight:8

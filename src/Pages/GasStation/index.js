@@ -4,8 +4,8 @@ import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Global from "../../Public/Global";
-import ListGasStation from "../GasStation/listGasStation";
-import NotFound from '../GasStation/notFound'
+import ListGasStation from "./listGasStation";
+import NotFound from './notFound'
 
 export default function Index({ navigation }) {
     const [ registrationId, setRegistrationId] = useState("");
@@ -225,7 +225,10 @@ export default function Index({ navigation }) {
                                         cityID = {cityID}
                                         stateID = {stateID}
                                         createdOn = {createdOn}
-                                        updatedOn = {updatedOn}
+                                        updatedOn = {updatedOn}       
+                                        route ={() => navigation.navigate("Show", { id: id } )}        
+                                                                 
+                                        
                                     />
                                 )   
                             })
