@@ -8,7 +8,8 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-Global.js
+src/Public/Global.js
+
 
 # macOS
 .DS_Store
