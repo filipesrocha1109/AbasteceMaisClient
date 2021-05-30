@@ -3,29 +3,50 @@ import {StyleSheet, Dimensions, TextInput, Text, TouchableOpacity, Alert, Scroll
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Global from "../../Public/Global";
-import ToAsseces from '../GasStation/ToAssess'
 import Comment from "../GasStation/comment";
+import NotFound from './notFoundComment';
+import Feather from "react-native-vector-icons/Feather";
+import { Rating, AirbnbRating } from 'react-native-elements';
+import Star from '../GasStation/star'
+
 
 export default function ShowGasStation( { route , navigation }) {
 
     const [ name, setName ] = useState("");
     const [ fullAddress, setFullAddress ] = useState("");
-
-
-
-
-
-
+    const [ listComments, SetListComments] = useState([]);
+    const [ comment, setComment ] = useState("");
+    const [ registrationId, setRegistrationId] = useState("");
+    const [ star, setStar ] = useState(0);
     const { id } = route.params;
+
     useEffect(() => {
-        getGasStation( id )
+        getGasStation(id),
+        comments(id),  
+        getData()
     }, []);
 
-    //http://servidor.construtiva.com.br/AbasteceMais/api/GasStations/GetGasStationsByID?ID=29
+    var StarsValue = 0;
+
+    const getData = async () => {
+        try {
+            const registration_id = await AsyncStorage.getItem(
+                "@registration_id"
+            );
+            if (registration_id) {
+                setRegistrationId(registration_id);
+            } else {
+                () => navigation.navigate("CreateRegistration");
+            }
+        } catch (e) {
+            Alert.alert(e);
+        }
+    };
+
 
     const getGasStation = ( id ) =>{
-        var uri = Global.ServerIP + "api/GasStations/GetGasStationsByID?ID="+  id
-        fetch(uri , {
+
+        fetch(Global.ServerIP + "api/GasStations/GetGasStationsByID?ID="+  id , {
             method: "GET",
             headers: {
                 Accept: "application/json",
@@ -41,10 +62,6 @@ export default function ShowGasStation( { route , navigation }) {
 
                     setName(gas.name);
                     setFullAddress(gas.address + ", " + gas.number + " - " + gas.districtID)
-
-
-
-                    console.log(gas)
                     
                 } else {
                     console.log(responseText.message);                 
@@ -54,6 +71,67 @@ export default function ShowGasStation( { route , navigation }) {
                 console.error(error);
             });    
     }
+
+    const comments = (gasstation) =>{
+
+        fetch(Global.ServerIP + "api/GasStations/GetComments?GasStationID=" + gasstation , {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: Global.Authorization,
+            }
+        })
+            .then((response) => response.text())
+            .then((responseText) => {
+                responseText = JSON.parse(responseText);
+                if (responseText.success) {
+                    //console.log(responseText.data.comments)
+                    SetListComments(responseText.data.comments)
+                    
+                } else {
+                    console.log(responseText.message);                 
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });  
+
+
+    }
+    const addComments = (gasstation, registration, comment) =>{
+
+        fetch(Global.ServerIP + "api/GasStations/CreateComments" , {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: Global.Authorization,
+            },body: JSON.stringify({
+                GasStationID: gasstation,
+                RegistrationID: registration,
+                Comment:comment
+            }),
+        })
+            .then((response) => response.text())
+            .then((responseText) => {
+                responseText = JSON.parse(responseText);
+                if (responseText.success) {
+                    //console.log(responseText.data.comments);
+                    Alert.alert("Your comment has been added.","Thanks for feddback!");
+                    comments(id);
+                    setComment("");
+                    
+                } else {
+                    console.log(responseText.message);                 
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });  
+
+    }
+
     
     
     return (
@@ -61,12 +139,32 @@ export default function ShowGasStation( { route , navigation }) {
             <View style={ styles.details }>
                 <Text> { name } </Text>
                 <Text> { fullAddress } </Text>
-                
+                <Star
+                    id={id}
+                />
+                             
             </View>
 
-            <ToAsseces 
-                id={id}
-            />
+            <View style={ styles.container } >
+
+                <View style={ styles.containerInput }  >
+                    <TextInput style={styles.input}
+                        placeholder={"comment ..."}
+                        numberOfLines={10}
+                        multiline={true}
+                        onChangeText={(text) => setComment(text)}
+                        value={comment}
+                    />  
+                </View>
+        
+                <Feather
+                    name="send"
+                    size={30}
+                    color={"#0e2d3f"}
+                    style={styles.send}
+                    onPress ={ () => addComments(id, registrationId, comment)}
+                />
+            </View>
             
             <SafeAreaView >
                 <ScrollView 
@@ -74,23 +172,30 @@ export default function ShowGasStation( { route , navigation }) {
                 keyboardShouldPersistTaps='always'
                 >
                     
-                    <Comment
-                        comment={"bom posto"}
-                    />
-                    <Comment
-                        comment={"bom legal"}
-                    />
-                    <Comment
-                        comment={"gasolina boa"}
-                    />
-                    <Comment
-                        comment={"show de bola"}
-                    />
-                    <Comment
-                        comment={"ruim"}
-                    />
+                {                  
+                    listComments.length>0 ?
 
-                
+                        listComments.map(({
+                            id,
+                            gasStaionID,
+                            registrationID,
+                            comment,
+                            createdOn,
+                            })=>{
+                                return(
+                                    <Comment
+                                        id = {id}
+                                        key = {id}                     
+                                        comment={comment}                                                
+                                    />
+                                )   
+                            })
+                        :    
+                        <NotFound                                           
+                        />                 
+                                        
+                }     
+               
                 </ScrollView>
             </SafeAreaView >
         </View>
@@ -116,4 +221,44 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
         height:heightScreen* 0.3
     },
+    containerInput:{
+        backgroundColor:'#E5E5E5',
+        height: heightScreen * 0.15,
+        borderRadius: 10,
+        padding: 10
+    },
+    lineWhite:{
+        height:10
+    },
+    input:{
+        //backgroundColor: '#FFFFFF',
+        height: '100%',
+        borderColor: '#B2B1B1',
+        borderRadius: 5,
+        borderWidth: 1,
+        padding: 10,
+        paddingRight:50,
+        width: widthScreen * 0.82,
+
+    },
+    send:{
+        transform: [{ rotate: '42deg'}],
+        alignSelf:'flex-end',
+        marginRight: 20,
+        marginTop: -60
+     },
+
+     commnet:{
+        backgroundColor:'#E5E5E5',
+        height: heightScreen * 0.15,
+        borderRadius: 10,
+        padding: 10
+     },
+     container:{
+        marginTop: 5,
+        marginBottom: 35
+     },
+     star:{
+        backgroundColor:'#E5E5E5',
+     }
 });

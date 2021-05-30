@@ -118,6 +118,7 @@ export default function Index({ navigation }) {
                 <View  style={styles.ContainerFilter}>
                     <TouchableOpacity style={order ? [styles.select,styles.firstSelect] : [styles.selectPlaceholder,styles.firstSelect]}>
                         <Picker
+                            selectedValue={order}
                             style={order ? styles.select : styles.selectPlaceholder}
                             onValueChange={(itemValue) => 
                             setOrder(itemValue)}                      
@@ -132,7 +133,8 @@ export default function Index({ navigation }) {
                     </TouchableOpacity>
                     <TouchableOpacity style={district ? styles.select : styles.selectPlaceholder}>
                         <Picker
-                            style={ district ? styles.select : styles.selectPlaceholder}
+                            selectedValue={district}
+                            style={ district ? styles.selectDistrict : styles.selectPlaceholderDistrict}
                             onValueChange={(itemValue) => 
                             setDistrict(itemValue)}                      
                         >
@@ -148,8 +150,9 @@ export default function Index({ navigation }) {
                 </View>
                 <View  style={styles.ContainerFilter}>
                     <TouchableOpacity style={typeGas ? [styles.select,styles.firstSelect] : [styles.selectPlaceholder,styles.firstSelect]}>
-                        <Picker
+                        <Picker                            
                             style={typeGas ? styles.select : styles.selectPlaceholder}
+                            selectedValue={typeGas}
                             onValueChange={(itemValue) => 
                             setTypeGas(itemValue)}                      
                         >
@@ -298,7 +301,7 @@ const styles = StyleSheet.create({
     },
     
     select: {
-        width: widthScreen * 0.48,
+        width: widthScreen * 0.45,
         marginLeft:5,
         backgroundColor: "#0e2d3f",
         borderRadius: 5,
@@ -308,7 +311,7 @@ const styles = StyleSheet.create({
         
     },
     selectPlaceholder:{
-        width: widthScreen * 0.48,
+        width: widthScreen * 0.45,
         marginLeft:5,
         backgroundColor: "#0e2d3f",
         borderRadius: 5,
@@ -319,6 +322,26 @@ const styles = StyleSheet.create({
     firstSelect:{
         marginLeft:0,
         width: widthScreen * 0.48,
-    }
+    },
+    selectPlaceholderDistrict:{
+        width: widthScreen * 0.46,
+        marginLeft:5,
+        backgroundColor: "#0e2d3f",
+        borderRadius: 5,
+        height: '100%',
+        color: "#B2B0B0",
+        padding: 0
+        
+    },
+    selectDistrict: {
+        width: widthScreen * 0.46,
+        marginLeft:5,
+        backgroundColor: "#0e2d3f",
+        borderRadius: 5,
+        height: '100%',
+        color: "#ffff",
+        padding: 0
+        
+    },
 
 });

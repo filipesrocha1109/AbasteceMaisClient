@@ -13,8 +13,7 @@ import NotFound from './notFound'
 
 export default function Comment( props ) {
     
-    //const { id } = route.params;
-    var _comment = "comentario ... " + props.comment
+    var _comment = props.comment
 
     return (
 
@@ -26,7 +25,6 @@ export default function Comment( props ) {
                     size={40}
                     color={"#0e2d3f"}
                     style={styles.user}
-                    //onPress ={Alert.alert("ok","ok")}
                 />
                 <View style={styles.comment}>
                     <Text>

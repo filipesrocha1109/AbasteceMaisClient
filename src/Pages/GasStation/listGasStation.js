@@ -4,11 +4,64 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Global from "../../Public/Global";
 
 
 export default function ListGasStation(props) {
     
     var name = props.name;
+
+    const [ registrationId, setRegistrationId] = useState("");
+
+    useEffect(() => {
+        getData()
+    }, []);
+
+    const getData = async () => {
+        try {
+            const registration_id = await AsyncStorage.getItem(
+                "@registration_id"
+            );
+            if (registration_id) {
+                setRegistrationId(registration_id);
+            } else {
+                () => navigation.navigate("CreateRegistration");
+            }
+        } catch (e) {
+            Alert.alert(e);
+        }
+    };
+
+    const assessment = (gasStation, registration, assessmentString) =>{
+
+        fetch(Global.ServerIP + "api/GasStations/CreateAssessment" , {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: Global.Authorization,
+            },body: JSON.stringify({
+                GasStationID: gasStation,
+                RegistrationID: registration,
+                Assessment: assessmentString
+            }),
+        })
+            .then((response) => response.text())
+            .then((responseText) => {
+                responseText = JSON.parse(responseText);
+                if (responseText.success) {
+                    console.log(responseText.data);
+                    Alert.alert("Your assessment has been added.","Thanks for feddback!");
+
+                } else {
+                    console.log(responseText.message);                 
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            }); 
+    }
 
     return (
        
@@ -33,14 +86,16 @@ export default function ListGasStation(props) {
                                 size={25}
                                 color="green"
                                 style={styles.like}
-                                onPress={() => alert('like')}
+                                onPress={() => assessment(props.id,registrationId,true)}
+                                
                             />
                             <AntDesign
                                 name="dislike1"
                                 size={25}
                                 color="red"
                                 style={styles.like}
-                                onPress={() => alert('deslike')}
+                                onPress={() => assessment(props.id,registrationId,false)}
+                                
                             />
                         </View>
                     </View>

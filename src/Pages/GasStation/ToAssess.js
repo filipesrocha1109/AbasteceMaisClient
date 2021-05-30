@@ -10,11 +10,12 @@ import { Header } from "@react-navigation/stack";
 import Global from "../../Public/Global";
 import ListGasStation from "./listGasStation";
 import NotFound from './notFound'
+const [ comment, setComment ] = useState("");
 
 export default function ToAsseces( porps ) {
     
-    //const { id } = route.params;
     var comentario = "Add a comment in gasstation..." + porps.id
+
 
     return (
         <View style={ styles.container } >
