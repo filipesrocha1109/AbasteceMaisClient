@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Home from '../Pages/GasStation/index'
 import Show from '../Pages/GasStation/showGasStation'
+import UpdatePrice from '../Pages/GasStation/updatePrice'
 
 const Stack = createStackNavigator();
 
@@ -28,7 +29,16 @@ export default function RoutesGasStation() {
                         headerShown:false,
                         headerTitleAlign:'center'
                     }}
-                />              
+                />   
+                <Stack.Screen
+                    name="UpdatePrice"
+                    component={UpdatePrice}                   
+                    options={{
+                        title: "Show",
+                        headerShown:false,
+                        headerTitleAlign:'center'
+                    }}
+                />            
             </Stack.Navigator>
     );
 }

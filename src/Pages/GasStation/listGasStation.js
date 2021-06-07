@@ -80,6 +80,11 @@ export default function ListGasStation(props) {
                             style={styles.maps}
                             onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${props.address}, ${props.number} - ${props.districtID}` )}
                         />
+                        <Text 
+                            style ={styles.distance}
+                        >
+                            { Number(props.distance).toFixed(2) + " km"}
+                        </Text>
                         <View style={styles.ContaineButtons} >
                             <AntDesign
                                 name="like1"
@@ -149,7 +154,7 @@ export default function ListGasStation(props) {
 const styles = StyleSheet.create({
     ContainerGasStation:{
         backgroundColor:"#E5E5E5",
-        height:160,
+        
         borderRadius:5,
         marginBottom: 7,
         flexDirection:'row'
@@ -222,6 +227,9 @@ const styles = StyleSheet.create({
     ContaineButtons:{
         flexDirection: "row",
         justifyContent: 'space-between',
+    },
+    distance:{
+        marginTop: 7
     }
 
 });

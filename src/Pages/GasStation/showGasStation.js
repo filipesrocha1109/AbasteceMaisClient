@@ -139,12 +139,22 @@ export default function ShowGasStation( { route , navigation }) {
             <View style={ styles.details }>
                 <Text> { name } </Text>
                 <Text> { fullAddress } </Text>
-                <Star
-                    id={id}
-                />
+                <Text 
+                    style={styles.updatePrices}
+                    onPress= {() => navigation.navigate("UpdatePrice", { id: id } )}
+                >
+                    Updadte prices
+                </Text>
                              
             </View>
-
+            <View 
+                style={styles.star}
+            >
+                <Star
+                    id={id}
+                    
+                />
+            </View>
             <View style={ styles.container } >
 
                 <View style={ styles.containerInput }  >
@@ -210,7 +220,8 @@ let widthScreen = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     details:{
         backgroundColor:'#E5E5E5',
-        height: heightScreen * 0.4,
+        //backgroundColor:'red',
+        height: heightScreen * 0.35,
         borderRadius: 10
     },
     lineWhite:{
@@ -246,19 +257,30 @@ const styles = StyleSheet.create({
         alignSelf:'flex-end',
         marginRight: 20,
         marginTop: -60
-     },
+    },
 
-     commnet:{
+    commnet:{
         backgroundColor:'#E5E5E5',
         height: heightScreen * 0.15,
         borderRadius: 10,
         padding: 10
-     },
-     container:{
+    },
+    container:{
         marginTop: 5,
         marginBottom: 35
-     },
-     star:{
+    },
+    star:{
         backgroundColor:'#E5E5E5',
-     }
+        width: widthScreen
+    },
+    updatePrices:{
+        color:'#ffff',
+        backgroundColor:'#1F9BE2',
+        height : 30,
+        width: 130,
+        textAlign:'center',
+        textAlignVertical: 'center',
+        borderRadius: 5
+
+    }
 });

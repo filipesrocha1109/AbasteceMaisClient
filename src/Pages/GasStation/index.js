@@ -18,8 +18,11 @@ export default function Index({ navigation }) {
     const [ listDistrict, SetListDistrict ] = useState([]);
     const [ load, SetLoad ] = useState(0);
     const [ listGasStation, SetListGasStation] = useState([]);
+    const [ latitudeUser, setLatitudeUser] = useState("");
+    const [ longitudeUser, setLongitudeUser] = useState("");
 
     useEffect(() => {
+        getData();
         listSelectGasStation(name, typeGas, district, order);
         listSelectDistrict("4314902");
     }, []);
@@ -30,8 +33,23 @@ export default function Index({ navigation }) {
             const registration_id = await AsyncStorage.getItem(
                 "@registration_id"
             );
+            const latitude_user = await AsyncStorage.getItem(
+                "@latitude_user"
+            );
+            const longitude_user = await AsyncStorage.getItem(
+                "@longitude_user"
+            );
             if (registration_id) {
                 setRegistrationId(registration_id);
+
+                if(latitude_user && longitude_user){
+
+                    //listSelectGasStation(name, typeGas, district, order,latitude_user,longitude_user);
+
+                    console.log("latitude: " + latitude_user)
+                    console.log("Longitude: " + longitude_user)
+                }
+                
             } else {
                 () => navigation.navigate("CreateRegistration");
             }
@@ -39,7 +57,7 @@ export default function Index({ navigation }) {
             Alert.alert(e);
         }
     };
-    getData();
+
 
     const listSelectDistrict = ( cityID ) =>{
         fetch(Global.ServerIP + "api/Registrations/GetDistricts?CityID=" + cityID , {
@@ -90,6 +108,7 @@ export default function Index({ navigation }) {
                     var list = responseText.data.gasStations;
 
                     SetListGasStation(list);
+                    
                     
                 } else {
                     console.log(responseText.message);                 
@@ -202,7 +221,8 @@ export default function Index({ navigation }) {
                             cityID,
                             stateID,
                             createdOn,
-                            updatedOn
+                            updatedOn,
+                            distance
                             })=>{
                                 return(
                                     <ListGasStation
@@ -228,7 +248,8 @@ export default function Index({ navigation }) {
                                         cityID = {cityID}
                                         stateID = {stateID}
                                         createdOn = {createdOn}
-                                        updatedOn = {updatedOn}       
+                                        updatedOn = {updatedOn} 
+                                        distance = {distance}      
                                         route ={() => navigation.navigate("Show", { id: id } )}        
                                                                  
                                         
