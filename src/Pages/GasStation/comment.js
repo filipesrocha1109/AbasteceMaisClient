@@ -3,13 +3,7 @@ import {StyleSheet, Dimensions, TextInput, KeyboardAvoidingView ,Text, Touchable
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
-import { Header } from "@react-navigation/stack";
 
-
-
-import Global from "../../Public/Global";
-import ListGasStation from "./listGasStation";
-import NotFound from './notFound'
 
 export default function Comment( props ) {
     
@@ -17,15 +11,20 @@ export default function Comment( props ) {
 
     return (
 
-
             <View style={ styles.container }  >
-
-                <EvilIcons
-                    name="user"
-                    size={40}
-                    color={"#0e2d3f"}
-                    style={styles.user}
-                />
+                <View style={[{ width:'20%', alignItems:'center'}] }>
+                    <EvilIcons
+                        name="user"
+                        size={40}
+                        color={"#0e2d3f"}
+                        
+                    />
+                    <Text    
+                        style={styles.user}
+                        >Filipe Rocha
+                    </Text>
+                </View>
+               
                 <View style={styles.comment}>
                     <Text>
                         { _comment }
@@ -45,7 +44,7 @@ let widthScreen = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     container:{
         backgroundColor:'#E5E5E5',
-        height: heightScreen * 0.1,
+        //height: heightScreen * 0.1,
         borderRadius: 10,
         padding: 10,
         marginBottom:5,
@@ -56,8 +55,11 @@ const styles = StyleSheet.create({
 
     comment:{
        width:'85%',
-       marginLeft:15
+ 
      },
+     user:{
+         textAlign:'center'
+     }
 
 
 });

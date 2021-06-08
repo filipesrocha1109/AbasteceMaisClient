@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import {StyleSheet, Dimensions, TextInput, Text, TouchableOpacity, Alert, ScrollView, SafeAreaView, StatusBar, View } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
 
 import Global from "../../Public/Global";
 import ListGasStation from "./listGasStation";
@@ -41,14 +43,6 @@ export default function Index({ navigation }) {
             );
             if (registration_id) {
                 setRegistrationId(registration_id);
-
-                if(latitude_user && longitude_user){
-
-                    //listSelectGasStation(name, typeGas, district, order,latitude_user,longitude_user);
-
-                    console.log("latitude: " + latitude_user)
-                    console.log("Longitude: " + longitude_user)
-                }
                 
             } else {
                 () => navigation.navigate("CreateRegistration");
@@ -91,32 +85,50 @@ export default function Index({ navigation }) {
     };
 
 
-    const listSelectGasStation = ( name, typegas, districtid, order ) =>{
-        var uri = Global.ServerIP + "api/GasStations/GetGasStations?Name="+ name +"&TypeGas="+ typegas +"&DistrictID="+ districtid +"&Order="+ order 
-        fetch(uri , {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: Global.Authorization,
-            }
-        })
-            .then((response) => response.text())
-            .then((responseText) => {
-                responseText = JSON.parse(responseText);
-                if (responseText.success) {
-                    var list = responseText.data.gasStations;
+    const listSelectGasStation = ( name, typegas, districtid, order) =>{
 
-                    SetListGasStation(list);
-                    
-                    
-                } else {
-                    console.log(responseText.message);                 
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });    
+        (async function(){
+            const {status, permissions} = await Permissions.askAsync(Permissions.LOCATION);
+            if(status === 'granted'){
+                let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+                console.log(location.coords.latitude);
+                console.log(location.coords.longitude);
+
+                var latitude = location.coords.latitude.toString();
+                var longitude = location.coords.longitude.toString();
+
+                var uri = Global.ServerIP + "api/GasStations/GetGasStations?Name="+ name +"&TypeGas="+ typegas +"&DistrictID="+ districtid +"&Order="+ order +"&latitude="+ latitude +"&longitude="+ longitude
+                console.log(uri)
+                fetch(uri , {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: Global.Authorization,
+                    }
+                })
+                    .then((response) => response.text())
+                    .then((responseText) => {
+                        responseText = JSON.parse(responseText);
+                        if (responseText.success) {
+                            var list = responseText.data.gasStations;
+
+                            SetListGasStation(list);
+                            
+                            
+                        } else {
+                            console.log(responseText.message);                 
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    }); 
+
+                
+            }else{
+                throw new Error('Location permission not granted');
+            }
+        })();      
     }
 
 
@@ -150,7 +162,7 @@ export default function Index({ navigation }) {
                         }
                         </Picker>
                     </TouchableOpacity>
-                    <TouchableOpacity style={district ? styles.select : styles.selectPlaceholder}>
+                    <TouchableOpacity style={district ? styles.selectDistrict : styles.selectPlaceholderDistrict}>
                         <Picker
                             selectedValue={district}
                             style={ district ? styles.selectDistrict : styles.selectPlaceholderDistrict}
@@ -345,21 +357,21 @@ const styles = StyleSheet.create({
         width: widthScreen * 0.48,
     },
     selectPlaceholderDistrict:{
-        width: widthScreen * 0.46,
+        width: widthScreen * 0.48,
         marginLeft:5,
         backgroundColor: "#0e2d3f",
         borderRadius: 5,
-        height: '100%',
+        height: '90%',
         color: "#B2B0B0",
         padding: 0
         
     },
     selectDistrict: {
-        width: widthScreen * 0.46,
+        width: widthScreen * 0.48,
         marginLeft:5,
         backgroundColor: "#0e2d3f",
         borderRadius: 5,
-        height: '100%',
+        height: '90%',
         color: "#ffff",
         padding: 0
         
