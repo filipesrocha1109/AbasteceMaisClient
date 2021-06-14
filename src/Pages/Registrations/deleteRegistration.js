@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Global from "../../Public/Global";
+import Header from "../../Components/Header/header";
 
 export default function DeleteRegistration ({ navigation }) {
 
@@ -59,7 +60,7 @@ export default function DeleteRegistration ({ navigation }) {
                 responseText = JSON.parse(responseText);
                 if (responseText.success) {
 
-                    console.log(responseText.data.registrationDeletdID)
+                    //console.log(responseText.data.registrationDeletdID)
                     Disconnect('registration_id')	
                     navigation.navigate('Login')
 
@@ -74,6 +75,11 @@ export default function DeleteRegistration ({ navigation }) {
   
     return (
         <View style={styles.container}>
+            <Header
+                navigation = { navigation }
+                menu = {true}
+                title = {'Delete Registration'}
+            />
             <Text style={styles.title}>               
                 Are you sure you want to delete the registration?
             </Text>
@@ -109,7 +115,7 @@ const styles = StyleSheet.create({
     },
     title:{
         textAlign: 'center',
-        marginTop:150,
+        marginTop:130,
         fontSize:20,
         fontWeight:'bold'
     },

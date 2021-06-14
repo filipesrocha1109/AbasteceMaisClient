@@ -4,6 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Global from "../../Public/Global";
 import NumericInput from '@wwdrew/react-native-numeric-textinput'
+import Header from '../../Components/Header/header';
 
 export default function UpdatePrice({ route , navigation } ) {
     const [gasolinaComum, setGasolinaComum] = useState("");
@@ -93,6 +94,11 @@ export default function UpdatePrice({ route , navigation } ) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Header
+                    navigation = { navigation }
+                    menu = {true}
+                    title = {'Update Price'}
+            />
             <ScrollView 
             style={styles.scrollView}
             keyboardShouldPersistTaps='always'

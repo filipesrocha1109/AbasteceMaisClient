@@ -4,9 +4,6 @@ import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Feather from "react-native-vector-icons/Feather";
 import { Header } from "@react-navigation/stack";
-
-
-
 import Global from "../../Public/Global";
 import ListGasStation from "./listGasStation";
 import NotFound from './notFound'

@@ -16,7 +16,7 @@ export default function RoutesUser() {
                     component={Show}                   
                     options={{
                         title: "Show registration",
-                        headerShown:true,
+                        headerShown:false,
                         headerTitleAlign:'center',
                         
                     }}
@@ -36,7 +36,7 @@ export default function RoutesUser() {
                     component={Update}                   
                     options={{
                         title: "Update registration",
-                        headerShown:true,
+                        headerShown:false,
                         headerTitleAlign:'center'
                     }}
                 />
@@ -45,7 +45,7 @@ export default function RoutesUser() {
                     component={Delete}                   
                     options={{
                         title: "Delete registration",
-                        headerShown:true,
+                        headerShown:false,
                         headerTitleAlign:'center'
                     }}
                 />            

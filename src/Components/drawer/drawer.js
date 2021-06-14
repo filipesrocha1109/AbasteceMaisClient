@@ -41,7 +41,8 @@ export default function DrawerContent(props) {
 				<DrawerItem
 					style={styles.item}
 					label="Home"
-					onPress={() => navigation.navigate('Home')}
+					onPress={() => navigation.navigate('Home', { screen: 'Home' })}
+					
 				/>
 				<IconAntDesign
 					name="user"
@@ -52,7 +53,8 @@ export default function DrawerContent(props) {
 				<DrawerItem
 					style={styles.item}
 					label="User"
-					onPress={() => navigation.navigate('User')}
+					onPress={() => navigation.navigate('User', { screen: 'Show' })}
+					
 				/>
 
 				

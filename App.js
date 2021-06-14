@@ -16,8 +16,8 @@ export default function App() {
             if(status === 'granted'){
                 //return Location.getCurrentPositionAsync({ enableHighAccuracy: true });
                 let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-                console.log(location.coords.latitude);
-                console.log(location.coords.longitude);
+                //console.log(location.coords.latitude);
+                //console.log(location.coords.longitude);
                 StoreData(
                     location.coords.latitude.toString(),
                     "latitude_user"

@@ -32,14 +32,19 @@ export default function Routes() {
                     component={gasStation}                   
                     options={{
                         title: "Gas Station",
-                        headerShown:true,
+                        headerShown:false,
                         headerTitleAlign:'center'
                     }}
                 />
                 <Drawer.Screen
                     name="User"
                     component={User}  
-                    openByDefault                                                                    
+                    options={{
+                        title: "Gas Station",
+                        headerShown:false,
+                        headerTitleAlign:'center'
+                    }}
+                                                                  
                 />
                 <Drawer.Screen
                     name="Login"

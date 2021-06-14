@@ -8,6 +8,10 @@ import NotFound from './notFoundComment';
 import Feather from "react-native-vector-icons/Feather";
 import { Rating, AirbnbRating } from 'react-native-elements';
 import Star from '../GasStation/star'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Header from '../../Components/Header/header'
+import IconAntDesign from "react-native-vector-icons/AntDesign";
+
 
 
 export default function ShowGasStation( { route , navigation }) {
@@ -136,46 +140,65 @@ export default function ShowGasStation( { route , navigation }) {
     
     return (
         <View >
-            <View style={ styles.details }>
-                <Text> { name } </Text>
-                <Text> { fullAddress } </Text>
-                <Text 
-                    style={styles.updatePrices}
-                    onPress= {() => navigation.navigate("UpdatePrice", { id: id } )}
-                >
-                    Updadte prices
-                </Text>
-                             
-            </View>
-            <View 
-                style={styles.star}
-            >
-                <Star
-                    id={id}
-                    
+            <KeyboardAwareScrollView keyboardShouldPersistTaps="padding"
+                style={{ backgroundColor: 'white' }}
+                contentContainerStyle={{
+                    flexGrow: 1
+                }}>
+                <Header
+                    navigation = { navigation }
+                    menu = {true}
+                    title = {'Show'}
                 />
-            </View>
-            <View style={ styles.container } >
-
-                <View style={ styles.containerInput }  >
-                    <TextInput style={styles.input}
-                        placeholder={"comment ..."}
-                        numberOfLines={10}
-                        multiline={true}
-                        onChangeText={(text) => setComment(text)}
-                        value={comment}
-                    />  
-                </View>
-        
-                <Feather
-                    name="send"
+                <View style={ styles.details }>
+                    <IconAntDesign
+                    name="arrowleft"
                     size={30}
-                    color={"#0e2d3f"}
-                    style={styles.send}
-                    onPress ={ () => addComments(id, registrationId, comment)}
-                />
-            </View>
+                    color="black"
+                    style={[{marginLeft:10}]}
+                    onPress={() => navigation.goBack()}
+                    
+                    />
+                    <Text> { name } </Text>
+                    <Text> { fullAddress } </Text>
+                    <Text 
+                        style={styles.updatePrices}
+                        onPress= {() => navigation.navigate("UpdatePrice", { id: id } )}
+                    >
+                        Updadte prices
+                    </Text>
+                                
+                </View>
+                <View 
+                    style={styles.star}
+                >
+                    <Star
+                        id={id}
+                        
+                    />
+                </View>
+                <View style={ styles.container } >
+
+                    <View style={ styles.containerInput }  >
+                        <TextInput style={styles.input}
+                            placeholder={"comment ..."}
+                            numberOfLines={10}
+                            multiline={true}
+                            onChangeText={(text) => setComment(text)}
+                            value={comment}
+                        />  
+                    </View>
             
+                    <Feather
+                        name="send"
+                        size={30}
+                        color={"#0e2d3f"}
+                        style={styles.send}
+                        onPress ={ () => addComments(id, registrationId, comment)}
+                    />
+                </View>
+            </KeyboardAwareScrollView>
+                
             <SafeAreaView >
                 <ScrollView 
                 style={styles.scrollView}
@@ -196,7 +219,8 @@ export default function ShowGasStation( { route , navigation }) {
                                     <Comment
                                         id = {id}
                                         key = {id}                     
-                                        comment={comment}                                                
+                                        comment={comment}     
+                                        name = {registrationID}                                           
                                     />
                                 )   
                             })
@@ -222,7 +246,8 @@ const styles = StyleSheet.create({
         backgroundColor:'#E5E5E5',
         //backgroundColor:'red',
         height: heightScreen * 0.35,
-        borderRadius: 10
+        borderRadius: 10,
+        borderBottomEndRadius:0
     },
     lineWhite:{
         height:10,

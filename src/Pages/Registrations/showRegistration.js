@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 import Global from "../../Public/Global";
+import Header from "../../Components/Header/header";
 
 export default function ShowRegistration ({ navigation }) {
 
@@ -56,18 +57,25 @@ export default function ShowRegistration ({ navigation }) {
     };
 
 
+    //<TouchableOpacity 
+    //            style={styles.ContainerPictureProfile}
+    //            onPress={() =>{alert('Adicionar Imagem')}}
+    //            >
+    //            <Image
+    //                style={styles.PictureProfile}
+    //                source={require('../../assets/Picture_User_Add_Black.png')}                   
+    //            />
+    //</TouchableOpacity>
+
     return (
         <View style={styles.Container}>
-
-            <TouchableOpacity 
-                style={styles.ContainerPictureProfile}
-                onPress={() =>{alert('Adicionar Imagem')}}
-                >
-                <Image
-                    style={styles.PictureProfile}
-                    source={require('../../assets/Picture_User_Add_Black.png')}                   
+            <Header
+                    navigation = { navigation }
+                    menu = {true}
+                    title = {'Show Registration'}
                 />
-            </TouchableOpacity>
+
+            
             <SafeAreaView >
                 <ScrollView 
                 style={styles.ContainerDataProfile}
@@ -79,7 +87,7 @@ export default function ShowRegistration ({ navigation }) {
                     <Text style={styles.Property}>Email</Text>
                     <Text style={styles.PropertyValue} >{registration.email}</Text>
                     <Text style={styles.Property}>CEP</Text>
-                    <Text style={styles.PropertyValue} >{registration.CEP ? registration.CEP : "Não informado"}</Text>
+                    <Text style={styles.PropertyValue} >{registration.CEP ? registration.CEP : "uninformed"}</Text>
 
                     <Text
                         style={styles.EditUser}
@@ -120,8 +128,10 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     ContainerDataProfile :{
-        height : heightScreen * 0.65
+        height : heightScreen * 0.95,
+        paddingTop: 20
         //backgroundColor: 'blue'
+
     },
     PictureProfile:{
         marginTop:25,

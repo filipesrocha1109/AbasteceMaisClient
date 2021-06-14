@@ -7,7 +7,9 @@ import * as Permissions from 'expo-permissions';
 
 import Global from "../../Public/Global";
 import ListGasStation from "./listGasStation";
-import NotFound from './notFound'
+import NotFound from './notFound';
+import Header from '../../Components/Header/header';
+import Loading from '../GasStation/loading';
 
 export default function Index({ navigation }) {
     const [ registrationId, setRegistrationId] = useState("");
@@ -22,6 +24,7 @@ export default function Index({ navigation }) {
     const [ listGasStation, SetListGasStation] = useState([]);
     const [ latitudeUser, setLatitudeUser] = useState("");
     const [ longitudeUser, setLongitudeUser] = useState("");
+    const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
         getData();
@@ -86,19 +89,20 @@ export default function Index({ navigation }) {
 
 
     const listSelectGasStation = ( name, typegas, districtid, order) =>{
+        setLoading(true);
 
         (async function(){
             const {status, permissions} = await Permissions.askAsync(Permissions.LOCATION);
             if(status === 'granted'){
                 let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-                console.log(location.coords.latitude);
-                console.log(location.coords.longitude);
+                //console.log(location.coords.latitude);
+                //console.log(location.coords.longitude);
 
                 var latitude = location.coords.latitude.toString();
                 var longitude = location.coords.longitude.toString();
 
                 var uri = Global.ServerIP + "api/GasStations/GetGasStations?Name="+ name +"&TypeGas="+ typegas +"&DistrictID="+ districtid +"&Order="+ order +"&latitude="+ latitude +"&longitude="+ longitude
-                console.log(uri)
+                //console.log(uri)
                 fetch(uri , {
                     method: "GET",
                     headers: {
@@ -114,6 +118,8 @@ export default function Index({ navigation }) {
                             var list = responseText.data.gasStations;
 
                             SetListGasStation(list);
+
+                            setLoading(false)
                             
                             
                         } else {
@@ -134,146 +140,157 @@ export default function Index({ navigation }) {
 
 
     return (
-        <View style={styles.Container}>
-            <View  style={styles.ContainerTop}>
-                <View  style={styles.ContainerSearch}>
-                    <TextInput
-                        style={styles.Search}
-                        placeholder={"Search..."}
-                        placeholderTextColor="#B2B0B0"
-                        onChangeText={(text) => setName(text)}
-                        value={name}
-                    />
-                    
-                </View>
-                <View  style={styles.ContainerFilter}>
-                    <TouchableOpacity style={order ? [styles.select,styles.firstSelect] : [styles.selectPlaceholder,styles.firstSelect]}>
-                        <Picker
-                            selectedValue={order}
-                            style={order ? styles.select : styles.selectPlaceholder}
-                            onValueChange={(itemValue) => 
-                            setOrder(itemValue)}                      
-                        >
-                        <Picker.Item label={" Select Order"} value={""} key={""}/>
-                        {
-                            listOrder.map(value =>{
-                                return <Picker.Item label={value} value={value} key={value}/>
-                            })
-                        }
-                        </Picker>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={district ? styles.selectDistrict : styles.selectPlaceholderDistrict}>
-                        <Picker
-                            selectedValue={district}
-                            style={ district ? styles.selectDistrict : styles.selectPlaceholderDistrict}
-                            onValueChange={(itemValue) => 
-                            setDistrict(itemValue)}                      
-                        >
-                            <Picker.Item label={"Select District"} value={""} key={""}/>
-                            {
-                                Object.keys(listDistrict).map(key => {
-                                    return <Picker.Item label={listDistrict[key]} value={key} key={key}/>
-                                })
-                            } 
-                            <Picker.Item label={"Outher District"} value={"NF"} key={"NF"}/> 
-                        </Picker>
-                    </TouchableOpacity>                              
-                </View>
-                <View  style={styles.ContainerFilter}>
-                    <TouchableOpacity style={typeGas ? [styles.select,styles.firstSelect] : [styles.selectPlaceholder,styles.firstSelect]}>
-                        <Picker                            
-                            style={typeGas ? styles.select : styles.selectPlaceholder}
-                            selectedValue={typeGas}
-                            onValueChange={(itemValue) => 
-                            setTypeGas(itemValue)}                      
-                        >
-                        <Picker.Item label={"Select Type Gas"} value={""} key={""}/>
-                        {
-                            listTypeGas.map(value =>{
-                                return <Picker.Item label={value} value={value} key={value}/>
-                            })
-                        }
-                        </Picker>
-                    </TouchableOpacity>
-                    <Text
-                    style={styles.buttonSearch}
-                    onPress={() => listSelectGasStation(name, typeGas, district, order)}
-                    >
-                    Search
-                    </Text>                         
-                </View>
-            </View>
-            <SafeAreaView >
-                <ScrollView 
-                style={styles.scrollView}
-                keyboardShouldPersistTaps='always'
-                >
-                {                  
-                    listGasStation.length>0 ?
 
-                        listGasStation.map(({
-                            id,
-                            status,
-                            name,
-                            phone,
-                            gasolinaComum,
-                            gasolinaAditivada,
-                            disel,
-                            gas,
-                            priceGasolinaComum,
-                            priceGasolinaAditivada,
-                            priceDisel,
-                            priceGas,
-                            latitude,
-                            longitude,
-                            cep,
-                            address,
-                            number,
-                            districtID,
-                            cityID,
-                            stateID,
-                            createdOn,
-                            updatedOn,
-                            distance
-                            })=>{
-                                return(
-                                    <ListGasStation
-                                        id = {id}
-                                        key = {id}
-                                        status = {status}
-                                        name = {name}
-                                        phone = {phone}
-                                        gasolinaComum = {gasolinaComum}
-                                        gasolinaAditivada = {gasolinaAditivada}
-                                        disel = {disel}
-                                        gas = {gas}
-                                        priceGasolinaComum = {priceGasolinaComum}
-                                        priceGasolinaAditivada = {priceGasolinaAditivada}
-                                        priceDisel = {priceDisel}
-                                        priceGas = {priceGas}
-                                        latitude = {latitude}
-                                        longitude = {longitude}
-                                        cep  = {cep}
-                                        address = {address}
-                                        number = {number}
-                                        districtID = {listDistrict[districtID]}
-                                        cityID = {cityID}
-                                        stateID = {stateID}
-                                        createdOn = {createdOn}
-                                        updatedOn = {updatedOn} 
-                                        distance = {distance}      
-                                        route ={() => navigation.navigate("Show", { id: id } )}        
-                                                                 
-                                        
-                                    />
-                                )   
-                            })
-                        :                     
-                        <NotFound/>                    
-                }              
-          
-                </ScrollView>
-            </SafeAreaView >
+        <View style={styles.Container}>
+            <Header
+                navigation = { navigation }
+                menu = {true}
+                title = {'Home'}
+            />
+                <View  style={styles.ContainerTop}>
+                    <View  style={styles.ContainerSearch}>
+                        <TextInput
+                            style={styles.Search}
+                            placeholder={"Search..."}
+                            placeholderTextColor="#B2B0B0"
+                            onChangeText={(text) => setName(text)}
+                            value={name}
+                        />
+                        
+                    </View>
+                    <View  style={styles.ContainerFilter}>
+                        <TouchableOpacity style={order ? [styles.select,styles.firstSelect] : [styles.selectPlaceholder,styles.firstSelect]}>
+                            <Picker
+                                selectedValue={order}
+                                style={order ? styles.select : styles.selectPlaceholder}
+                                onValueChange={(itemValue) => 
+                                setOrder(itemValue)}                      
+                            >
+                            <Picker.Item label={" Select Order"} value={""} key={""}/>
+                            {
+                                listOrder.map(value =>{
+                                    return <Picker.Item label={value} value={value} key={value}/>
+                                })
+                            }
+                            </Picker>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={district ? styles.selectDistrict : styles.selectPlaceholderDistrict}>
+                            <Picker
+                                selectedValue={district}
+                                style={ district ? styles.selectDistrict : styles.selectPlaceholderDistrict}
+                                onValueChange={(itemValue) => 
+                                setDistrict(itemValue)}                      
+                            >
+                                <Picker.Item label={"Select District"} value={""} key={""}/>
+                                {
+                                    Object.keys(listDistrict).map(key => {
+                                        return <Picker.Item label={listDistrict[key]} value={key} key={key}/>
+                                    })
+                                } 
+                                <Picker.Item label={"Outher District"} value={"NF"} key={"NF"}/> 
+                            </Picker>
+                        </TouchableOpacity>                              
+                    </View>
+                    <View  style={styles.ContainerFilter}>
+                        <TouchableOpacity style={typeGas ? [styles.select,styles.firstSelect] : [styles.selectPlaceholder,styles.firstSelect]}>
+                            <Picker                            
+                                style={typeGas ? styles.select : styles.selectPlaceholder}
+                                selectedValue={typeGas}
+                                onValueChange={(itemValue) => 
+                                setTypeGas(itemValue)}                      
+                            >
+                            <Picker.Item label={"Select Type Gas"} value={""} key={""}/>
+                            {
+                                listTypeGas.map(value =>{
+                                    return <Picker.Item label={value} value={value} key={value}/>
+                                })
+                            }
+                            </Picker>
+                        </TouchableOpacity>
+                        <Text
+                        style={styles.buttonSearch}
+                        onPress={() => listSelectGasStation(name, typeGas, district, order)}
+                        >
+                        Search
+                        </Text>                         
+                    </View>
+                </View>
+                <SafeAreaView >
+                    {isLoading ?
+                        <Loading/>
+                        :
+
+                        <ScrollView 
+                        style={styles.scrollView}
+                        keyboardShouldPersistTaps='always'
+                        >
+                        {                  
+                            listGasStation.length>0 ?
+                            
+                                listGasStation.map(({
+                                    id,
+                                    status,
+                                    name,
+                                    phone,
+                                    gasolinaComum,
+                                    gasolinaAditivada,
+                                    disel,
+                                    gas,
+                                    priceGasolinaComum,
+                                    priceGasolinaAditivada,
+                                    priceDisel,
+                                    priceGas,
+                                    latitude,
+                                    longitude,
+                                    cep,
+                                    address,
+                                    number,
+                                    districtID,
+                                    cityID,
+                                    stateID,
+                                    createdOn,
+                                    updatedOn,
+                                    distance
+                                })=>{
+                                        return(
+                                            <ListGasStation
+                                            id = {id}
+                                            key = {id}
+                                            status = {status}
+                                            name = {name}
+                                            phone = {phone}
+                                            gasolinaComum = {gasolinaComum}
+                                            gasolinaAditivada = {gasolinaAditivada}
+                                            disel = {disel}
+                                            gas = {gas}
+                                                priceGasolinaComum = {priceGasolinaComum}
+                                                priceGasolinaAditivada = {priceGasolinaAditivada}
+                                                priceDisel = {priceDisel}
+                                                priceGas = {priceGas}
+                                                latitude = {latitude}
+                                                longitude = {longitude}
+                                                cep  = {cep}
+                                                address = {address}
+                                                number = {number}
+                                                districtID = {listDistrict[districtID]}
+                                                cityID = {cityID}
+                                                stateID = {stateID}
+                                                createdOn = {createdOn}
+                                                updatedOn = {updatedOn} 
+                                                distance = {distance}      
+                                                route ={() => navigation.navigate("Show", { id: id } )}        
+                                                
+                                                
+                                            />
+                                            )   
+                                        })
+                                        :                     
+                                <NotFound/>                    
+                        }              
+                
+                        </ScrollView>
+                    }
+                </SafeAreaView >
 
         </View>
         

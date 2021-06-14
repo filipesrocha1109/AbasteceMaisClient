@@ -10,7 +10,7 @@ export default function Test () {
     const [ state, setState] = useState([])
 
     const Save = () =>{
-        console.log(state)
+        //console.log(state)
     }
   
     return (

@@ -51,7 +51,7 @@ export default function ListGasStation(props) {
             .then((responseText) => {
                 responseText = JSON.parse(responseText);
                 if (responseText.success) {
-                    console.log(responseText.data);
+                    //console.log(responseText.data);
                     Alert.alert("Your assessment has been added.","Thanks for feddback!");
 
                 } else {

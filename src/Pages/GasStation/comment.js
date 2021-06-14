@@ -7,7 +7,8 @@ import EvilIcons from "react-native-vector-icons/EvilIcons";
 
 export default function Comment( props ) {
     
-    var _comment = props.comment
+    const _comment = props.comment;
+    const name = props.name;
 
     return (
 
@@ -21,7 +22,7 @@ export default function Comment( props ) {
                     />
                     <Text    
                         style={styles.user}
-                        >Filipe Rocha
+                        >{name}
                     </Text>
                 </View>
                

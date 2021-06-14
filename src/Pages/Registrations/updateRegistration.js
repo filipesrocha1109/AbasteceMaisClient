@@ -4,6 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Global from "../../Public/Global";
+import Header from "../../Components/Header/header";
 
 
 export default function CreateRegistration({ navigation }) {
@@ -20,6 +21,7 @@ export default function CreateRegistration({ navigation }) {
     const [CEPError, setCEPError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [replayPasswordError, setReplayPasswordError] = useState("");
+    const [registrationID, setRegistartionID] = useState("");
     
     
     useEffect(() => {     
@@ -58,6 +60,7 @@ export default function CreateRegistration({ navigation }) {
                     setName(responseText.data.registration.name)
                     setEmail(responseText.data.registration.email)
                     setCEP(responseText.data.registration.cep)
+                    setRegistartionID(responseText.data.registration.id)
 
 
                 } else {
@@ -112,14 +115,15 @@ export default function CreateRegistration({ navigation }) {
         }
         
         if(!errorCreate){
-            fetch(Global.ServerIP + "api/Registrations/CreateRegistrations", {
-                method: "POST",
+            fetch(Global.ServerIP + "api/Registrations/UpdateRegistrationsbyID", {
+                method: "PUT",
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
                     Authorization: Global.Authorization,
                 },
                 body: JSON.stringify({
+                    id : registrationID,
                     name : name,
                     email : email,
                     password : password,
@@ -137,7 +141,7 @@ export default function CreateRegistration({ navigation }) {
                                 errors,       
                             );
                         }else{
-                            navigation.navigate("Login");
+                            navigation.navigate('User', { screen: 'Show' });
                         }
                         
 
@@ -160,6 +164,11 @@ export default function CreateRegistration({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Header
+                navigation = { navigation }
+                menu = {true}
+                title = {'Update Registration'}
+            />
             <ScrollView 
             style={styles.scrollView}
             keyboardShouldPersistTaps='always'
