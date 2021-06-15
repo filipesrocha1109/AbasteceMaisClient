@@ -141,7 +141,24 @@ export default function ListGasStation(props) {
                         <Text style = { props.priceGas == 0 ? styles.PriceWhite : styles.Price}> 
                             R$ {props.priceGas ? props.priceGas : 0 }
                         </Text>
+                        
                     </View>
+                    {  props.lastUpdatePrice ?
+                    <View>
+                        <Text style={styles.updated}>
+                        Updated: {props.lastUpdatePrice}
+                        </Text>
+                    </View>
+                    :
+                    <View>
+                        <Text style={[styles.updated,{marginTop:5}]}>
+                        Updated:
+                        </Text>
+                        <Text style={styles.updated}>
+                        Not Found
+                        </Text>
+                    </View>
+                    }
                     
                 </View>
                 
@@ -176,11 +193,11 @@ const styles = StyleSheet.create({
         width: 30,
         resizeMode: "stretch",
         alignItems: "center",   
-        marginTop:8,    
+        marginTop:3,    
     },
     Price:{
         color:'black',
-        marginTop:10,
+        marginTop:5,
         fontSize:18,
         fontFamily:'Roboto',
         marginRight:8
@@ -227,9 +244,17 @@ const styles = StyleSheet.create({
     ContaineButtons:{
         flexDirection: "row",
         justifyContent: 'space-between',
+        paddingRight:5,
+        marginTop:5
     },
     distance:{
         marginTop: 7
+    },
+    updated:{
+        fontSize: 11,
+        //marginLeft: -15,
+        marginBottom: 3,
+        textAlign:'center'
     }
 
 });

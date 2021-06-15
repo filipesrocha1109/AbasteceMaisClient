@@ -61,6 +61,14 @@ export default function Login({ navigation }) {
         }
     };
 
+    const RecoverPassword = () =>{
+        if(user){
+            Alert.alert("Recover Password", "Password recovery sent by email")
+        }else{
+            Alert.alert("Recover Password", "Please enter the e-mail")
+        }
+    };
+
     return (
         <View style={styles.Container}>
             <Image
@@ -75,7 +83,7 @@ export default function Login({ navigation }) {
             />
             <TextInput
                 style={styles.Input}
-                placeholder={"Username"}
+                placeholder={"E-mail"}
                 placeholderTextColor="#fff"
                 onChangeText={(text) => setUser(text)}
                 value={user}
@@ -97,7 +105,10 @@ export default function Login({ navigation }) {
             <Text style={styles.Button} onPress={Login}>
                 LOGIN
             </Text>
-            <Text style={styles.ForgotPasswor}>forgot passwor ?</Text>
+            <Text 
+                style={styles.ForgotPasswor}
+                onPress={() => RecoverPassword()}
+                >forgot passwor ?</Text>
             <Text
                 style={styles.ForgotPasswor}
                 onPress={() => navigation.navigate("Create",{ screen: 'Create' })}

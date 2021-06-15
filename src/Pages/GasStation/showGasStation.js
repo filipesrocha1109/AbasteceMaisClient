@@ -20,6 +20,7 @@ export default function ShowGasStation( { route , navigation }) {
     const [ fullAddress, setFullAddress ] = useState("");
     const [ listComments, SetListComments] = useState([]);
     const [ comment, setComment ] = useState("");
+    const [ gasStation, setGasstation ] = useState({});
     const [ registrationId, setRegistrationId] = useState("");
     const [ star, setStar ] = useState(0);
     const { id } = route.params;
@@ -63,6 +64,8 @@ export default function ShowGasStation( { route , navigation }) {
                 responseText = JSON.parse(responseText);
                 if (responseText.success) {
                     var gas = responseText.data.gasStation;
+
+                    setGasstation(gas);
 
                     setName(gas.name);
                     setFullAddress(gas.address + ", " + gas.number + " - " + gas.districtID)
@@ -165,7 +168,7 @@ export default function ShowGasStation( { route , navigation }) {
                         style={styles.updatePrices}
                         onPress= {() => navigation.navigate("UpdatePrice", { id: id } )}
                     >
-                        Updadte prices
+                        Update Price
                     </Text>
                                 
                 </View>
@@ -174,8 +177,11 @@ export default function ShowGasStation( { route , navigation }) {
                 >
                     <Star
                         id={id}
-                        
                     />
+                    <View style={styles.updated}>
+                        <Text style={styles.updated} >Updated: {gasStation.lastUpdatePrice ? gasStation.lastUpdatePrice : "Not Found" }</Text>
+                        <Text style={styles.updated} >Updated by: {gasStation.namelastUpdatePrice ? gasStation.namelastUpdatePrice : "Not Found"}</Text>
+                    </View>
                 </View>
                 <View style={ styles.container } >
 
@@ -247,7 +253,8 @@ const styles = StyleSheet.create({
         //backgroundColor:'red',
         height: heightScreen * 0.35,
         borderRadius: 10,
-        borderBottomEndRadius:0
+        borderBottomEndRadius:0,
+        borderBottomStartRadius:0
     },
     lineWhite:{
         height:10,
@@ -296,7 +303,14 @@ const styles = StyleSheet.create({
     },
     star:{
         backgroundColor:'#E5E5E5',
-        width: widthScreen
+        width: widthScreen,
+        display:'flex',
+        flexDirection:'row',
+        justifyContent: 'space-between',
+        paddingHorizontal:12,
+        paddingLeft:20,
+        paddingBottom:8
+        
     },
     updatePrices:{
         color:'#ffff',
@@ -305,7 +319,16 @@ const styles = StyleSheet.create({
         width: 130,
         textAlign:'center',
         textAlignVertical: 'center',
-        borderRadius: 5
+        borderRadius: 5,
+        alignItems:'flex-end',
+        position:'absolute',
+        bottom:0,
+        right:18
 
+    },updated:{
+        fontSize:10,
+        textAlign:'center',
+        marginRight:10
     }
+
 });

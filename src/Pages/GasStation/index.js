@@ -250,7 +250,8 @@ export default function Index({ navigation }) {
                                     stateID,
                                     createdOn,
                                     updatedOn,
-                                    distance
+                                    distance,
+                                    lastUpdatePrice
                                 })=>{
                                         return(
                                             <ListGasStation
@@ -263,22 +264,23 @@ export default function Index({ navigation }) {
                                             gasolinaAditivada = {gasolinaAditivada}
                                             disel = {disel}
                                             gas = {gas}
-                                                priceGasolinaComum = {priceGasolinaComum}
-                                                priceGasolinaAditivada = {priceGasolinaAditivada}
-                                                priceDisel = {priceDisel}
-                                                priceGas = {priceGas}
-                                                latitude = {latitude}
-                                                longitude = {longitude}
-                                                cep  = {cep}
-                                                address = {address}
-                                                number = {number}
-                                                districtID = {listDistrict[districtID]}
-                                                cityID = {cityID}
-                                                stateID = {stateID}
-                                                createdOn = {createdOn}
-                                                updatedOn = {updatedOn} 
-                                                distance = {distance}      
-                                                route ={() => navigation.navigate("Show", { id: id } )}        
+                                            priceGasolinaComum = {priceGasolinaComum}
+                                            priceGasolinaAditivada = {priceGasolinaAditivada}
+                                            priceDisel = {priceDisel}
+                                            priceGas = {priceGas}
+                                            latitude = {latitude}
+                                            longitude = {longitude}
+                                            cep  = {cep}
+                                            address = {address}
+                                            number = {number}
+                                            districtID = {listDistrict[districtID]}
+                                            cityID = {cityID}
+                                            stateID = {stateID}
+                                            createdOn = {createdOn}
+                                            updatedOn = {updatedOn} 
+                                            distance = {distance} 
+                                            lastUpdatePrice = {lastUpdatePrice}     
+                                            route ={() => navigation.navigate("Show", { id: id } )}        
                                                 
                                                 
                                             />

@@ -64,9 +64,11 @@ export default function Star( props ) {
 
         { 
         value != -1 ?  
-            <Text >
+            <Text 
+                style={{marginTop:-20}}
+            >
                 <Rating 
-                    imageSize={30} 
+                    imageSize={35} 
                     startingValue={value}  
                     readonly
                     style={ styles.star }

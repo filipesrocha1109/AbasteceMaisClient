@@ -5,6 +5,9 @@ import {StyleSheet, Dimensions, Image, TextInput, Text, TouchableOpacity, Alert,
 export default function NotFoundComment() {
     return (
         <View style={styles.Container}>
+            <Text
+                style={styles.Text}
+            >Comments Not Found</Text>
         </View>
     )
 };
@@ -19,11 +22,14 @@ const styles = StyleSheet.create({
         flex:1,
         textAlignVertical:'center',
         height: heightScreen * 0.1,
+        marginTop:50
         
     },
     Text:{
-        fontSize:35,
-        color:'#930F0F'
+        fontSize:25,
+        color:'#930F0F',
+
+
     }
     
 });
