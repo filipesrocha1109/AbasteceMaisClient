@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {StyleSheet, Dimensions, TextInput, Text, TouchableOpacity, Alert, ScrollView, SafeAreaView, StatusBar, View } from "react-native";
+import {StyleSheet, Dimensions, TextInput, Text, TouchableOpacity, Alert, ScrollView, SafeAreaView, StatusBar, View, Image } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Global from "../../Public/Global";
@@ -67,10 +67,6 @@ export default function ShowGasStation( { route , navigation }) {
                     var gas = responseText.data.gasStation;
 
                     setGasstation(gas);
-
-                    setName(gas.name);
-                    setFullAddress(gas.address + ", " + gas.number + " - " + gas.districtID)
-
                     setCEP(gas.cep)
                     
                 } else {
@@ -158,7 +154,7 @@ export default function ShowGasStation( { route , navigation }) {
                     <Text
                         style={styles.Name}
                     > 
-                        { name } 
+                        { gasStation.name } 
                     </Text>
                     <Text 
                         style={[styles.address, {marginTop:5}]}
@@ -176,6 +172,26 @@ export default function ShowGasStation( { route , navigation }) {
                     > 
                         { "PORTO ALEGRE" + " - " + gasStation.stateID } 
                     </Text>
+                    <View
+                        style={styles.containerImg}
+                    >
+                        <Image
+                            style={styles.ImgTypeGas}
+                            source={ gasStation.priceGasolinaComum == 0 ? require('../../assets/GC_GRAY.png') : require('../../assets/GC.png')}
+                        />
+                        <Image
+                            style={styles.ImgTypeGas}
+                            source={ gasStation.priceGasolinaAditivada == 0 ? require('../../assets/GA_GRAY.png') : require('../../assets/GA.png')}
+                        />
+                        <Image
+                            style={styles.ImgTypeGas}
+                            source={ gasStation.priceDisel == 0 ? require('../../assets/DS_GRAY.png') : require('../../assets/DS.png')}
+                        />
+                        <Image
+                            style={styles.ImgTypeGas}
+                            source={ gasStation.priceGas == 0 ? require('../../assets/GS_GRAY.png') : require('../../assets/GS.png')}
+                        />
+                    </View>
                     <Text 
                         style={styles.updatePrices}
                         onPress= {() => navigation.navigate("UpdatePrice", { id: id } )}
@@ -357,6 +373,21 @@ const styles = StyleSheet.create({
         paddingRight:20,
         textAlign:'center',
         //marginTop:20
+    },
+    ImgTypeGas:{
+        height: 35,
+        width: 35,
+        resizeMode: "stretch",
+        alignItems: "center",   
+        marginTop:3,
+        marginLeft:3    
+    },
+    containerImg:{
+        display:'flex',
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'center',
+        paddingTop:10
     }
 
 });

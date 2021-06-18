@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     },
     PriceWhite:{
         color:'#B0B0B0',
-        marginTop:10,
+        marginTop:5,
         fontSize:18,
         fontFamily:'Roboto',
         marginRight:8

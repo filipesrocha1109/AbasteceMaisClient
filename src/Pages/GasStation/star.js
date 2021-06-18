@@ -64,9 +64,13 @@ export default function Star( props ) {
 
         { 
         value != -1 ?  
-            <Text 
-                style={{marginTop:-20}}
+            <View 
+                style={{marginTop:-25}}
             >
+                
+                <Text
+                    style={{textAlign:'center', marginBottom:2}}
+                >{value + " / 5" }</Text>
                 <Rating 
                     imageSize={35} 
                     startingValue={value}  
@@ -74,9 +78,10 @@ export default function Star( props ) {
                     style={ styles.star }
                     type='custom'
                     tintColor = {"#E5E5E5"}
+                    
                 />
                 
-            </Text>
+            </View>
         :
             stars(id)
         }

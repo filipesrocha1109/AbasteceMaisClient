@@ -15,6 +15,8 @@ export default function ShowRegistration ({ navigation }) {
         getData();
     }, []);
 
+    
+
     const getData = async () => {
         try {
             const registration_id = await AsyncStorage.getItem(
@@ -30,6 +32,8 @@ export default function ShowRegistration ({ navigation }) {
             Alert.alert(e);
         }
     };
+
+    getData();
 
     const GetRegistration = ( ID ) => {
         fetch(Global.ServerIP + "api/Registrations/GetRegistrationsByID?ID="+ ID , {

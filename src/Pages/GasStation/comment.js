@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
 
     comment:{
        width:'85%',
+        justifyContent:'center'
  
      },
      user:{

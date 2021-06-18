@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         marginHorizontal: 5,
-        height:heightScreen* 0.64
+        height:heightScreen* 0.66
     },
     ContainerTop:{
         height:heightScreen* 0.21
