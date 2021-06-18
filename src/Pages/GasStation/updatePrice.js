@@ -5,6 +5,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Global from "../../Public/Global";
 import NumericInput from '@wwdrew/react-native-numeric-textinput'
 import Header from '../../Components/Header/header';
+import IconAntDesign from "react-native-vector-icons/AntDesign";
+
 
 export default function UpdatePrice({ route , navigation } ) {
     const [gasolinaComum, setGasolinaComum] = useState("");
@@ -102,7 +104,9 @@ export default function UpdatePrice({ route , navigation } ) {
             <ScrollView 
             style={styles.scrollView}
             keyboardShouldPersistTaps='always'
+            
             >
+                
                 <NumericInput
                     style={styles.Input}
                     type='currency'
@@ -156,6 +160,7 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         marginHorizontal: 30,
+        paddingTop:20
     },
     FirstInput: {
         width: "100%",

@@ -21,6 +21,7 @@ export default function ShowGasStation( { route , navigation }) {
     const [ listComments, SetListComments] = useState([]);
     const [ comment, setComment ] = useState("");
     const [ gasStation, setGasstation ] = useState({});
+    const [ CEP, setCEP ] = useState("");
     const [ registrationId, setRegistrationId] = useState("");
     const [ star, setStar ] = useState(0);
     const { id } = route.params;
@@ -69,6 +70,8 @@ export default function ShowGasStation( { route , navigation }) {
 
                     setName(gas.name);
                     setFullAddress(gas.address + ", " + gas.number + " - " + gas.districtID)
+
+                    setCEP(gas.cep)
                     
                 } else {
                     console.log(responseText.message);                 
@@ -138,8 +141,6 @@ export default function ShowGasStation( { route , navigation }) {
             });  
 
     }
-
-    
     
     return (
         <View >
@@ -154,16 +155,27 @@ export default function ShowGasStation( { route , navigation }) {
                     title = {'Show'}
                 />
                 <View style={ styles.details }>
-                    <IconAntDesign
-                    name="arrowleft"
-                    size={30}
-                    color="black"
-                    style={[{marginLeft:10}]}
-                    onPress={() => navigation.goBack()}
-                    
-                    />
-                    <Text> { name } </Text>
-                    <Text> { fullAddress } </Text>
+                    <Text
+                        style={styles.Name}
+                    > 
+                        { name } 
+                    </Text>
+                    <Text 
+                        style={[styles.address, {marginTop:5}]}
+                    > 
+                        { gasStation.address + " , " + gasStation.number } 
+                    </Text>
+                    <Text
+                        
+                        style={styles.address}
+                    > 
+                        { CEP.substring(0,5) + "-" + CEP.substring(5,8) } 
+                    </Text>
+                    <Text
+                        style={styles.address}
+                    > 
+                        { "PORTO ALEGRE" + " - " + gasStation.stateID } 
+                    </Text>
                     <Text 
                         style={styles.updatePrices}
                         onPress= {() => navigation.navigate("UpdatePrice", { id: id } )}
@@ -329,6 +341,22 @@ const styles = StyleSheet.create({
         fontSize:10,
         textAlign:'center',
         marginRight:10
+    },Name:{
+        fontSize:21,
+        fontWeight:'bold',
+        color:'#0e2d3f',
+        paddingLeft:20,
+        paddingRight:20,
+        textAlign:'center',
+        marginTop:20
+    },
+    address:{
+        fontWeight:'bold',
+        color:'black',
+        paddingLeft:20,
+        paddingRight:20,
+        textAlign:'center',
+        //marginTop:20
     }
 
 });

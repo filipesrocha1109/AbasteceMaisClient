@@ -68,9 +68,15 @@ export default function ListGasStation(props) {
             <View style={styles.ContainerGasStation}>
                 <View style={styles.ContainerLeft}>
                     <TouchableOpacity  onPress={props.route}>
-                        <Text style={styles.Name} >{name.length > 25 ? name.substring(0, 25) + "...": name}</Text>
-                        <Text>{`${props.address}, ${props.number} - ${props.districtID}` }</Text>
-                        <Text>{`${props.cep ? props.cep: '00000-000' }`}</Text>
+                        <Text style={styles.Name} >
+                            {name.length > 25 ? name.substring(0, 25) + "...": name}
+                        </Text>
+                        <Text>
+                            {`${props.address}, ${props.number} - ${props.districtID}` }
+                        </Text>
+                        <Text>
+                            {`${props.cep ? props.cep: '00000-000' }`}
+                        </Text>
                     </TouchableOpacity >
                     <View style={styles.ContaineButtons}> 
                         <MaterialCommunityIcons

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, TextInput, Text, View, Image } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
+import IconAntDesign from "react-native-vector-icons/AntDesign";
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { DrawerActions   } from '@react-navigation/native';
 
@@ -18,7 +19,7 @@ export default function Header( props ) {
             <Text
                 style={styles.Title}
             >{title ? title : 'Home'}</Text>
-            { menu ?
+            
                 <Feather
                     name="menu"
                     size={30}
@@ -27,9 +28,16 @@ export default function Header( props ) {
                     onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
                     
                 />
-            :
-            <Text style={[{position: 'absolute'}]}></Text>
-            }
+                <IconAntDesign
+                name="arrowleft"
+                size={30}
+                color="black"
+                style={[{left: 20,top:10, position:'absolute',zIndex:90}]}
+                onPress={() => navigation.goBack()}
+                
+            />
+                
+            
         </View>
     );
 }
@@ -46,7 +54,9 @@ const styles = StyleSheet.create({
     },
     menu:{
         position: 'absolute',
-        left: 20,
+        right: 20,
+        top:15
+
 
     },
     Title:{
