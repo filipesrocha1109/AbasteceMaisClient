@@ -192,7 +192,7 @@ export default function CreateGasstation({ navigation }) {
 
 
                 <Text style={styles.Button} onPress={Save}>
-                    Create
+                    Add
                 </Text>
             </ScrollView>
         </SafeAreaView>
