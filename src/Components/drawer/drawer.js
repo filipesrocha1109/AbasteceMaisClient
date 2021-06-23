@@ -2,6 +2,8 @@ import React from 'react';
 import { View, StyleSheet, SafeAreaView, Image, Dimensions   } from 'react-native';
 import IconAntDesign from "react-native-vector-icons/AntDesign";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Entypo from "react-native-vector-icons/Entypo";
+
 import { DrawerItem,DrawerContentScrollView } from '@react-navigation/drawer';
 
 export default function DrawerContent(props) {
@@ -56,6 +58,19 @@ export default function DrawerContent(props) {
 					onPress={() => navigation.navigate('User', { screen: 'Show' })}
 					
 				/>
+				<Entypo
+					name="add-to-list"
+					size={20}
+					color="black"
+					style={styles.IconAdd}
+            	/>
+				<DrawerItem
+					style={styles.item}
+					label="Add Gass"
+					onPress={() => navigation.navigate('Home', { screen: 'Create' })}
+					
+				/>
+				
 
 				
 
@@ -123,6 +138,12 @@ const styles = StyleSheet.create({
 	IconUser: {
         position: "absolute",
         top: 274,
+        left: 25,
+        zIndex: 3,
+    },
+	IconAdd: {
+        position: "absolute",
+        top: 335,
         left: 25,
         zIndex: 3,
     },

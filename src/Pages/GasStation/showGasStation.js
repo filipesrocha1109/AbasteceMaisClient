@@ -151,47 +151,50 @@ export default function ShowGasStation( { route , navigation }) {
                     title = {'Show'}
                 />
                 <View style={ styles.details }>
-                    <Text
-                        style={styles.Name}
-                    > 
-                        { gasStation.name } 
-                    </Text>
-                    <Text 
-                        style={[styles.address, {marginTop:5}]}
-                    > 
-                        { gasStation.address + " , " + gasStation.number } 
-                    </Text>
-                    <Text
-                        
-                        style={styles.address}
-                    > 
-                        { CEP.substring(0,5) + "-" + CEP.substring(5,8) } 
-                    </Text>
-                    <Text
-                        style={styles.address}
-                    > 
-                        { "PORTO ALEGRE" + " - " + gasStation.stateID } 
-                    </Text>
-                    <View
-                        style={styles.containerImg}
-                    >
-                        <Image
-                            style={styles.ImgTypeGas}
-                            source={ gasStation.priceGasolinaComum == 0 ? require('../../assets/GC_GRAY.png') : require('../../assets/GC.png')}
-                        />
-                        <Image
-                            style={styles.ImgTypeGas}
-                            source={ gasStation.priceGasolinaAditivada == 0 ? require('../../assets/GA_GRAY.png') : require('../../assets/GA.png')}
-                        />
-                        <Image
-                            style={styles.ImgTypeGas}
-                            source={ gasStation.priceDisel == 0 ? require('../../assets/DS_GRAY.png') : require('../../assets/DS.png')}
-                        />
-                        <Image
-                            style={styles.ImgTypeGas}
-                            source={ gasStation.priceGas == 0 ? require('../../assets/GS_GRAY.png') : require('../../assets/GS.png')}
-                        />
-                    </View>
+                    
+                        <Text
+                            style={styles.Name}
+                        > 
+                            { gasStation.name } 
+                        </Text>
+                        <Text 
+                            style={[styles.address, {marginTop:5}]}
+                        > 
+                            { gasStation.address + " , " + gasStation.number } 
+                        </Text>
+                        <Text
+                            
+                            style={styles.address}
+                        > 
+                            { CEP.substring(0,5) + "-" + CEP.substring(5,8) } 
+                        </Text>
+                        <Text
+                            style={styles.address}
+                        > 
+                            { "PORTO ALEGRE" + " - " + gasStation.stateID } 
+                        </Text>
+                        <View
+                            style={styles.containerImg}
+                        >
+                            <Image
+                                style={styles.ImgTypeGas}
+                                source={ gasStation.priceGasolinaComum == 0 ? require('../../assets/GC_GRAY.png') : require('../../assets/GC.png')}
+                            />
+                            <Image
+                                style={styles.ImgTypeGas}
+                                source={ gasStation.priceGasolinaAditivada == 0 ? require('../../assets/GA_GRAY.png') : require('../../assets/GA.png')}
+                            />
+                            <Image
+                                style={styles.ImgTypeGas}
+                                source={ gasStation.priceDisel == 0 ? require('../../assets/DS_GRAY.png') : require('../../assets/DS.png')}
+                            />
+                            <Image
+                                style={styles.ImgTypeGas}
+                                source={ gasStation.priceGas == 0 ? require('../../assets/GS_GRAY.png') : require('../../assets/GS.png')}
+                            />
+                        </View>
+
+                    
                     <Text 
                         style={styles.updatePrices}
                         onPress= {() => navigation.navigate("UpdatePrice", { id: id } )}
@@ -358,7 +361,7 @@ const styles = StyleSheet.create({
         textAlign:'center',
         marginRight:10
     },Name:{
-        fontSize:21,
+        fontSize:20,
         fontWeight:'bold',
         color:'#0e2d3f',
         paddingLeft:20,

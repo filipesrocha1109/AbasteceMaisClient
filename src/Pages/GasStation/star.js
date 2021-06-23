@@ -70,7 +70,7 @@ export default function Star( props ) {
                 
                 <Text
                     style={{textAlign:'center', marginBottom:2}}
-                >{value + " / 5" }</Text>
+                >{ value.toFixed(1) + " / 5" }</Text>
                 <Rating 
                     imageSize={35} 
                     startingValue={value}  
