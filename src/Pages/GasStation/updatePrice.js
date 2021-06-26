@@ -70,7 +70,7 @@ export default function UpdatePrice({ route , navigation } ) {
                     if (responseText.success) {
                         navigation.goBack()
                     } else {
-                        console.log(responseText.message);                 
+                        Alert.alert("Error", "Values ​​inconsistent with standard deviation.")               
                     }
                 })
                 .catch((error) => {

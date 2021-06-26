@@ -150,16 +150,25 @@ export default function ListGasStation(props) {
                         
                     </View>
                     {  props.lastUpdatePrice ?
-                    <View>
+                    <View style={{display:'flex',flexDirection:'row', paddingTop:5,paddingLeft:5}}>
+                        <MaterialCommunityIcons
+                        name="update"
+                        size={20}
+                        color="black"         
+                        />
+
                         <Text style={styles.updated}>
-                        Updated: {props.lastUpdatePrice}
+                        {props.lastUpdatePrice}
                         </Text>
                     </View>
                     :
-                    <View>
-                        <Text style={[styles.updated,{marginTop:5}]}>
-                        Updated:
-                        </Text>
+                    <View style={{display:'flex',flexDirection:'row', paddingTop:5,paddingLeft:5}}>
+                        <MaterialCommunityIcons
+                        name="update"
+                        size={20}
+                        color="black"         
+                        />
+
                         <Text style={styles.updated}>
                         Not Found
                         </Text>
@@ -206,14 +215,14 @@ const styles = StyleSheet.create({
         marginTop:5,
         fontSize:18,
         fontFamily:'Roboto',
-        marginRight:8
+        marginRight:10
     },
     PriceWhite:{
         color:'#B0B0B0',
         marginTop:5,
         fontSize:18,
         fontFamily:'Roboto',
-        marginRight:8
+        marginRight:10
     },
     ContainerPrice:{
         flexDirection: "row",
@@ -260,7 +269,9 @@ const styles = StyleSheet.create({
         fontSize: 11,
         //marginLeft: -15,
         marginBottom: 3,
-        textAlign:'center'
+        textAlign:'center',
+        marginTop:3,
+        marginLeft:5
     }
 
 });
